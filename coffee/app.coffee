@@ -4,10 +4,11 @@ Date::strftime = (->
     (format + "").replace(/%([a-zA-Z])/g, (m, f) ->
       formatter = Date.formats && Date.formats[f]
       if typeof formatter == "function"
-        return formatter.call(Date.formats, date)
+        formatter.call(Date.formats, date)
       else if typeof formatter == "string"
-        return date.strftime(formatter)
-      f
+        date.strftime(formatter)
+      else
+        f
     )
   zeroPad = (num) ->
     ((if +num < 10 then "0" else "")) + num

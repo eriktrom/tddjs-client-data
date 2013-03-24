@@ -12,8 +12,9 @@ Date.prototype.strftime = (function() {
         return formatter.call(Date.formats, date);
       } else if (typeof formatter === "string") {
         return date.strftime(formatter);
+      } else {
+        return f;
       }
-      return f;
     });
   };
   zeroPad = function(num) {
