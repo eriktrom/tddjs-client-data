@@ -10,10 +10,8 @@ Date.prototype.strftime = (function() {
       formatter = Date.formats && Date.formats[f];
       if (typeof formatter === "function") {
         return formatter.call(Date.formats, date);
-      } else {
-        if (typeof formatter === "string") {
-          return date.strftime(formatter);
-        }
+      } else if (typeof formatter === "string") {
+        return date.strftime(formatter);
       }
       return f;
     });
