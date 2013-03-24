@@ -28,7 +28,7 @@ Date::strftime = (->
       zeroPad(date.getMonth() + 1)
 
     y: (date) ->
-      date.getYear() % 100
+      zeroPad(date.getYear() % 100)
 
     Y: (date) ->
       date.getFullYear()
