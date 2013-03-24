@@ -1,3 +1,10 @@
+output = (text, color) ->
+  p = document.createElement("p")
+  p.innerHTML = text
+  p.style.color = color
+  document.body.appendChild(p)
+
+
 assert = (message, expr) ->
   if !expr
     throw new Error(message)
@@ -16,6 +23,6 @@ try
   assert("%y should return year as two digits", date.strftime("%y") is "09")
   assert("%F should act as %Y-%m-%d", date.strftime("%F") is "2009-10-02")
 
-  console.log("#{assert.count} tests OK")
+  output("#{assert.count} tests OK", "#0c0")
 catch e
-  console.log("Test failed: #{e.message}")
+  output("Test failed: #{e.message}", "#c00")
