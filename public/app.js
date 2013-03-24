@@ -9,15 +9,17 @@ Date.prototype.strftime = (function() {
       var formatter;
       formatter = Date.formats && Date.formats[f];
       if (typeof formatter === "function") {
-        formatter.call(Date.formats, date);
-      } else if (typeof formatter === "string") {
-        date.strftime(formatter);
+        return formatter.call(Date.formats, date);
+      } else {
+        if (typeof formatter === "string") {
+          return date.strftime(formatter);
+        }
       }
       return f;
     });
   };
   zeroPad = function(num) {
-    return (+num < 10 ? "0" : " ") + num;
+    return (+num < 10 ? "0" : "") + num;
   };
   Date.formats = {
     d: function(date) {
