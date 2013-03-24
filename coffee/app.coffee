@@ -2,10 +2,10 @@ Date::strftime = (->
   strftime = (format) ->
     date = this
     (format + "").replace(/%([a-zA-Z])/g, (m, f) ->
-      formatter = Date.formats and Date.formats[f]
-      if typeof formatter is "function"
+      formatter = Date.formats && Date.formats[f]
+      if typeof formatter == "function"
         return formatter.call(Date.formats, date)
-      else if typeof formatter is "string"
+      else if typeof formatter == "string"
         return date.strftime(formatter)
       f
     )
