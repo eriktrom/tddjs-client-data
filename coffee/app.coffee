@@ -1,7 +1,7 @@
 Date::strftime = (->
   strftime = (format) ->
     date = this
-    (format + "").replace(/%([a-zA-Z])/g, (m, f) ->
+    (format + "").replace /%([a-zA-Z])/g, (m, f) ->
       formatter = Date.formats && Date.formats[f]
       if typeof formatter == "function"
         formatter.call(Date.formats, date)
@@ -9,7 +9,7 @@ Date::strftime = (->
         date.strftime(formatter)
       else
         f
-    )
+
   zeroPad = (num) ->
     ((if +num < 10 then "0" else "")) + num
 
