@@ -57,10 +57,10 @@ autoWatch = true;
 // - IE (only Windows)
 browsers = [
   'Chrome',
-  // 'ChromeCanary',
-  // 'Firefox',
+  'ChromeCanary',
+  'Firefox',
   // 'Opera',
-  // 'Safari',
+  'Safari',
   'PhantomJS'
   // IE works if you open a vm and point IE at machost.local:9876
 ];
