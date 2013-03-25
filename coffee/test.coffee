@@ -1,50 +1,20 @@
-module "group a",
-  setup: ->
-  teardown: ->
+module "Date.prototype.strftime Tests",
+  setup: -> @date = new Date(2009, 9, 2, 22, 14, 45)
+  tearDown: -> delete @date
 
-test "a basic test", -> # 3 specifies the number of asserts to expect, needed for synchronous callback
-  value = "hello"
-  deepEqual(value, "hello", "We expect the value to be true") # 1
+test "%Y should return full year", ->
+  year = Date.formats.Y(@date)
+  strictEqual(year, 2009)
 
-test "a synchronous callback test", 2, ->
-  calc = (x, operation) -> operation(x)
-  result = calc 2, (x) ->
-    ok(true, "calc() calls operation function")
-    x * x
-  equal(result, 4, "2 square equals 4")
+test "%m should return month", ->
+  month = Date.formats.m(@date)
+  strictEqual(month, "10")
 
+test "%d should return date", ->
+  strictEqual(Date.formats.d(@date), "02")
 
-module("group b")
-asyncTest "asynchronous test: one second later", 1, ->
-  setTimeout ->
-    ok(true, "Passed and ready to resume")
-    start()
-  , 1000
+test "%y should return year as two digits", ->
+  strictEqual(Date.formats.y(@date), "09")
 
-# ok
-# equal
-# strictEqual
-# deepEqual
-
-
-# Better example of synchronous callback
-# test( "a test", 1, function() {
-#   var $body = $( "body" );
-#
-#   $body.on( "click", function() {
-#     ok( true, "body was clicked!" );
-#   });
-#
-#   $body.trigger( "click" );
-# });
-
-
-# Better example of asyncTest
-# asyncTest( "asynchronous test: video ready to play", 1, function() {
-#   var $video = $( "video" );
-#
-#   $video.on( "canplaythrough", function() {
-#     ok( true, "video has loaded and is ready to play" );
-#     start();
-#   });
-# });
+test "%F should act as %Y-%m-%d", ->
+  strictEqual(@date.strftime("%F"), "2009-10-02")
