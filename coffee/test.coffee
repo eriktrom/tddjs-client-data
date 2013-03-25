@@ -1,4 +1,5 @@
 test "a basic test", 3, -> # 3 specifies the number of asserts to expect, needed for synchronous callback
+  # expect(3) # this also works for specifying number of expected assertions
   value = "hello"
   deepEqual(value, "hello", "We expect the value to be true") # 1
 
