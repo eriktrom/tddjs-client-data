@@ -11,7 +11,7 @@ Date::strftime = (->
         f
     )
   zeroPad = (num) ->
-    ((if +num < 10 then "0" else "")) + num
+    (if +num < 10 then "0" else "") + num
 
   Date.formats =
     d: (date) ->
