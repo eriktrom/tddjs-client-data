@@ -1,17 +1,26 @@
-test "a basic test", 3, -> # 3 specifies the number of asserts to expect, needed for synchronous callback
-  # expect(3) # this also works for specifying number of expected assertions
+module("group a",
+  setup: ->
+  teardown: ->
+)
+test "a basic test", -> # 3 specifies the number of asserts to expect, needed for synchronous callback
   value = "hello"
   deepEqual(value, "hello", "We expect the value to be true") # 1
 
-  calc = (x, operation) ->
-    operation(x)
-
-  result = calc(2, (x) ->
-    ok(true, "calc() calls operation function") # 2, synchronous callback
+test "a synchronous callback test", 2, ->
+  calc = (x, operation) -> operation(x)
+  result = calc 2, (x) ->
+    ok(true, "calc() calls operation function")
     x * x
-  )
+  equal(result, 4, "2 square equals 4")
 
-  equal(result, 4, "2 square equals 4") # 3
+
+module("group b")
+asyncTest "asynchronous test: one second later", 1, ->
+  setTimeout ->
+    ok(true, "Passed and ready to resume")
+    start()
+  , 1000
+
 # ok
 # equal
 # strictEqual
@@ -27,4 +36,15 @@ test "a basic test", 3, -> # 3 specifies the number of asserts to expect, needed
 #   });
 #
 #   $body.trigger( "click" );
+# });
+
+
+# Better example of asyncTest
+# asyncTest( "asynchronous test: video ready to play", 1, function() {
+#   var $video = $( "video" );
+#
+#   $video.on( "canplaythrough", function() {
+#     ok( true, "video has loaded and is ready to play" );
+#     start();
+#   });
 # });

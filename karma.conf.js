@@ -10,7 +10,8 @@ basePath = '';
 files = [
   QUNIT,
   QUNIT_ADAPTER,
-  'public/*.js'
+  'public/app.js',
+  'public/test.js'
 ];
 
 
