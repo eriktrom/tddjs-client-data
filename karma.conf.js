@@ -55,7 +55,15 @@ autoWatch = true;
 // - Safari (only Mac)
 // - PhantomJS
 // - IE (only Windows)
-browsers = ['ChromeCanary', 'PhantomJS'];
+browsers = [
+  'Chrome',
+  // 'ChromeCanary',
+  // 'Firefox',
+  // 'Opera',
+  // 'Safari',
+  'PhantomJS'
+  // IE works if you open a vm and point IE at machost.local:9876
+];
 
 
 // If browser does not capture in given timeout [ms], kill it
