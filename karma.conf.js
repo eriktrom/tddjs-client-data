@@ -8,10 +8,12 @@ basePath = '';
 
 // list of files / patterns to load in the browser
 files = [
-  QUNIT,
-  QUNIT_ADAPTER,
-  'public/app.js',
-  'public/test.js'
+  // QUNIT,
+  // QUNIT_ADAPTER,
+  JASMINE,
+  JASMINE_ADAPTER,
+  'public/app.coffee',
+  'coffee/test.coffee'
 ];
 
 
