@@ -12,7 +12,10 @@ files = [
   // QUNIT_ADAPTER,
   JASMINE,
   JASMINE_ADAPTER,
-  'public/app.coffee',
+  'vendor/jasmine-given.js',
+  'vendor/sinon-1.6.0.js',
+  'vendor/jasmine-sinon.js',
+  'coffee/app.coffee',
   'coffee/test.coffee'
 ];
 
@@ -62,7 +65,7 @@ browsers = [
   'ChromeCanary',
   'Firefox',
   // 'Opera',
-  'Safari',
+  // 'Safari', // it opens more than one tab which is annoying on start
   'PhantomJS'
   // IE works if you open a vm and point IE at machost.local:9876
 ];
