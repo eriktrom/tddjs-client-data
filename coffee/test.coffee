@@ -59,16 +59,11 @@ describe "a Circle", ->
   describe "created via constructor function", ->
     Given -> @circ = new Circle(6)
     Then -> expect(@circ).toBeInstanceOf Object
-    Then -> expect(@circ).toBeInstanceOf Circle
-    Then -> expect(@circ.constructor).toEqual Circle
-    # we could also use And here - the difference is that with And, the Given above is not re-run, and thus 3 things are worth noting:
-    # 1) the Given remains idempotent,
-    # 2) we get a performance boost,
-    # 3) the test output only shows tests for Then, and thus using And does not increase the number of tests, although it does provide the right place of failure, so it works just as good at determining point of failure
-    # And -> expect(@circ.constructor).toEqual Circle
+    And -> expect(@circ).toBeInstanceOf Circle
+    And -> expect(@circ.constructor).toEqual Circle
   describe "created via object literal", ->
     Given -> @circ2 = radius: 6
     Then -> expect(@circ2).toBeInstanceOf Object
-    Then -> expect(@circ2.constructor).toEqual Object
+    And -> expect(@circ2.constructor).toEqual Object
 
 
