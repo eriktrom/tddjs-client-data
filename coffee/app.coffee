@@ -1,3 +1,3 @@
 adder = (base) ->
   (num) ->
-    base + num 
+    base + num

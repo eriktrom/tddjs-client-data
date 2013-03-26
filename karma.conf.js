@@ -24,6 +24,11 @@ files = [
 
   'coffee/app.coffee',
   'coffee/test.coffee'
+
+  // to use source maps, use coffeescript compiler
+  // `coffee -o js/ -cwbm coffee/`
+  // 'js/app.js',
+  // 'js/test.js'
 ];
 
 
@@ -68,9 +73,9 @@ autoWatch = true;
 // - PhantomJS
 // - IE (only Windows)
 browsers = [
-  'Chrome',
+  // 'Chrome',
   'ChromeCanary',
-  'Firefox',
+  // 'Firefox',
   // 'Opera',
   // 'Safari', // it opens more than one tab which is annoying on start
   'PhantomJS'

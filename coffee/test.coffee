@@ -1,43 +1,23 @@
-# describe "Array#splice", ->
-#   it "should return removed items", ->
-#     arr = [1, 2, 3, 4, 5]
-#     result = arr.splice(2, 3)
-#     expect(result).toEqual([3, 4, 5])
+### apply takes two arguments
+  the first is this
+  the second is an array of arguments to pass to the function being called
+    does not need to be actual array, array like object will do which means
+    you can pass arguments as the second arg and therefore means you can
+    chaing together function calls passing arguments down the chain, this
+    must be what promises are for or something, but we'll see
+###
 
+sum = ->
+  total = 0
+  for index of arguments
+    total = total + arguments[index]
+  total
 
-# describe "Function#length property", ->
-#   it "does something", ->
-#     expect(document.getElementById.length).toBe(1)
-#     expect(console.log.length).toBe(0)
+describe "sum", ->
+  it "shuld sum the numbers", ->
+    expected = sum(1, 2, 3, 4, 5)
+    expect(expected).toEqual 15
 
-# describe "the arguments object", ->
-#   # modify = null
-#   beforeEach ->
-#     @modify = (a, b) ->
-#       b = 42
-#       arguments[0] = arguments[1]
-#       a
-#
-#   it "shares a dynamic relationship with formal parameters", ->
-#     # changing a property of the arguments object causes the corresponding
-#     # formal parameter to change and vice versa
-#     expect(@modify(1, 2)).toEqual(42)
-#
-#   it "returns undefined for missing default params", ->
-#     expect(@modify(1)).toBeUndefined
-
-# global = this
-# describe "Global Object Test", ->
-#   describe "window object", ->
-#     it "is === to global object", -> expect(window).toBe global
-#     it "is === to global.window", -> expect(window).toBe global.window
-#     it "is === to window.window", -> expect(window).toBe window.window
-
-describe "adder", ->
-  inc = adder(1)
-  dec = adder(-1)
-
-  Then -> expect(inc(2)).toEqual 3
-  Then -> expect(dec(4)).toEqual 3
-  Then -> expect(inc(dec(3))).toEqual 3
-
+  it "should sum the numbers using apply", ->
+    expected = sum.apply(null, [1, 2, 3, 4, 5])
+    expect(expected).toEqual 15
