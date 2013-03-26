@@ -12,9 +12,15 @@ files = [
   // QUNIT_ADAPTER,
   JASMINE,
   JASMINE_ADAPTER,
+
+  // 'vendor/jquery-1.9.1.js',
+  // 'vendor/jasmine-jquery.js',
+
   'vendor/jasmine-given.js',
-  'vendor/sinon-1.6.0.js',
-  'vendor/jasmine-sinon.js',
+  
+  // 'vendor/sinon-1.6.0.js',
+  // 'vendor/jasmine-sinon.js',
+
   'coffee/app.coffee',
   'coffee/test.coffee'
 ];

@@ -34,7 +34,7 @@
 #     it "is === to window.window", -> expect(window).toBe window.window
 
 describe "adder", ->
-  Given ->    
+  Given ->
     @inc = adder(1)
     @dec = adder(-1)
 
