@@ -14,6 +14,11 @@ files = [
   JASMINE,
   JASMINE_ADAPTER,
 
+
+  // 'vendor/matchers.js',
+  'vendor/jasmine-matchers-1.1.0.js',
+  'vendor/my-matchers.js',
+
   'vendor/jasmine-given.js',
 
   // 'vendor/jquery-1.9.1.js',
@@ -78,7 +83,7 @@ browsers = [
   // 'Firefox',
   // 'Opera',
   // 'Safari', // it opens more than one tab which is annoying on start
-  'PhantomJS'
+  // 'PhantomJS'
   // IE works if you open a vm and point IE at machost.local:9876
 ];
 
