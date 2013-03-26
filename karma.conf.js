@@ -11,10 +11,8 @@ files = [
   // QUNIT,
   // QUNIT_ADAPTER,
 
-  JASMINE, // you may disable this and enable the next two
-  // 'vendor/jasmine.js',
-  // 'vendor/jasmine-html.js',
-  JASMINE_ADAPTER, // this must stay or IE fails
+  JASMINE,
+  JASMINE_ADAPTER,
 
   'vendor/jasmine-given.js',
 
