@@ -10,14 +10,17 @@ basePath = '';
 files = [
   // QUNIT,
   // QUNIT_ADAPTER,
-  JASMINE,
-  JASMINE_ADAPTER,
+
+  JASMINE, // you may disable this and enable the next two
+  // 'vendor/jasmine.js',
+  // 'vendor/jasmine-html.js',
+  JASMINE_ADAPTER, // this must stay or IE fails
+
+  'vendor/jasmine-given.js',
 
   // 'vendor/jquery-1.9.1.js',
   // 'vendor/jasmine-jquery.js',
 
-  'vendor/jasmine-given.js',
-  
   // 'vendor/sinon-1.6.0.js',
   // 'vendor/jasmine-sinon.js',
 

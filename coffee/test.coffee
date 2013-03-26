@@ -34,10 +34,10 @@
 #     it "is === to window.window", -> expect(window).toBe window.window
 
 describe "adder", ->
-  Given ->
-    @inc = adder(1)
-    @dec = adder(-1)
+  inc = adder(1)
+  dec = adder(-1)
 
-  Then -> expect(@inc(2)).toEqual 3
-  Then -> expect(@dec(4)).toEqual 3
-  Then -> expect(@inc(@dec(3))).toEqual 3
+  Then -> expect(inc(2)).toEqual 3
+  Then -> expect(dec(4)).toEqual 3
+  Then -> expect(inc(dec(3))).toEqual 3
+
