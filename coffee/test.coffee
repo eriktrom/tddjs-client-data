@@ -85,13 +85,20 @@ describe "a Circle", ->
 
   describe "calling prototype without 'new' returns undefined", ->
     Given -> @circle = Circle(6)
-    Then -> expect(typeof @circle).not.toBe "undefined"
-    # the above is supposed to return undefined, I get "number"
-      # oh, that's because inside my Circle = -> definition, coffeescript
-      # returns the last expression, which is @radius = radius, which is a number
-    Then -> expect(@circle).not.toBeNumber() # see note ^^
-    Then -> expect(radius).toEqual 6 # this should be fixed with update to Circle, but its not
+    Then -> expect(typeof @circle).toBe "undefined"
+    Then -> "it sets radius on the global scope", expect(radius).toEqual 6
+    # ^^ this should be fixed with update to Circle, but its not
     # ^^Oops! we've defined radius on global object
+
+describe "Function inherit", ->
+  Given ->
+    @SubFn = ->
+    @SuperFn = ->
+  When -> @SubFn.inherit(@SuperFn)
+  Then "it should link prototypes", ->
+    expect(new @SubFn()).toBeInstanceOf @SuperFn
+  Then "it should setup a link to super", ->
+    expect(@SubFn::_super).toEqual @SuperFn::
 
 describe "a Sphere", ->
   Given -> @sphere = new Sphere(6)
@@ -99,11 +106,6 @@ describe "a Sphere", ->
   Then -> expect(@sphere).toBeInstanceOf Circle
   Then -> expect(@sphere).toBeInstanceOf Object
   Then -> expect(@sphere.diameter()).toEqual 12
+  it "should calculate sphere area", ->
+    expect(Math.round(@sphere.area())).toEqual 452
 
-describe "Function inherit", ->
-  Given ->
-    @SubFn = ->
-    @SuperFn = ->
-    @SubFn.inherit(@SuperFn)
-  it "should link prototypes", ->
-    expect(new @SubFn()).toBeInstanceOf @SuperFn

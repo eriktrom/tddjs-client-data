@@ -21,12 +21,56 @@ tddjs = (->
     tddjs.uid = uid
 )()
 
-Circle = (radius) ->
-  if !(this instanceof Circle)
-    @new_instance = new Circle(radius)
-  @radius = radius
-  @new_instance
 
+# `
+# function Circle(radius) {
+#   function getSetRadius() {
+#     if (arguments.length > 0) {
+#       if (arguments[0] < 0) {
+#         throw new TypeError("Radius should be >= 0");
+#       }
+#       radius = arguments[0];
+#     }
+#     return radius;
+#   }
+#
+#   function diameter() {
+#     return radius * 2;
+#   }
+#
+#   function circumference() {
+#     return diameter() * Math.PI;
+#   }
+#
+#   // Expose privileged methods
+#   this.radius = getSetRadius;
+#   this.diameter = diameter;
+#   this.circumference = circumference;
+#   this.radius(radius);
+# }
+# `
+
+# ^^ above is the javascript version, which works the same way... Are there
+# ANY differences? The tests all pass exactly the same.
+
+# Robust version of Circle constructor
+# none of the nested functions need this
+# outside code cannot tamper with internal state except through the public API
+Circle = (radius) ->
+  getSetRadius = ->
+    if arguments.length > 0
+      if arguments[0] < 0 then throw new TypeError("Radius should be >= 0")
+      radius = arguments[0]
+    radius
+  diameter = -> radius * 2
+  circumference = -> diameter() * Math.PI
+  # expose priveleged methods
+  @radius = getSetRadius
+  @diameter = diameter
+  @circumference = circumference
+  @radius(radius)
+
+# Old notes, will likely be removed after next commit
 # without constructor property below, instances of this constructor
 # function will have a different 'constructor' property, namely Object
 # instead of Circle
@@ -50,7 +94,7 @@ Circle = (radius) ->
   p.diameter = -> @radius * 2
   p.circumference = -> @diameter() * Math.PI
   p.area = -> @radius * @radius * Math.PI
-)(Circle.prototype)
+)(Circle::)
 
 
 # implementing super
@@ -79,13 +123,33 @@ unless Function::inherit
   (->
     F = ->
     Function::inherit = (superFn) ->
-      F.prototype = superFn.prototype
-      @prototype = new F()
-      @prototype.constructor = this
+      F:: = superFn::
+      @:: = new F()
+      @::constructor = @
+      @::_super = superFn::
   )()
 
 Sphere = (radius) ->
-  @radius = radius
+  Circle.call(this, radius)
 
 Sphere.inherit(Circle)
 
+Sphere::area = ->
+  4 * @_super.area.call(this)
+
+
+# Private Methods
+((circleProto) ->
+  # Functions declared in this scope are private and only available to other
+  # functions declared in the same scope, they will not be available to methods
+  # added to the object or its prototype at a later stage
+  ensureValidRadius = (radius) -> radius >= 0
+  getRadius = -> @radius
+  setRadius = (radius) ->
+    if ensureValidRadius(radius)
+      @radius = radius
+  # assigning the functions to properties of the prototype makes them public
+  # methods
+  circleProto.getRadius = getRadius
+  circleProto.setRadius = setRadius
+)(Circle::)
