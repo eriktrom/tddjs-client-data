@@ -56,6 +56,15 @@ tddjs = (->
 # Robust version of Circle constructor
 # none of the nested functions need this
 # outside code cannot tamper with internal state except through the public API
+unless Object.create
+  (->
+    F = ->
+    Object.create = (object) ->
+      F:: = object
+      new F()
+    undefined
+  )()
+
 Circle = (radius) ->
   getSetRadius = ->
     if arguments.length > 0
@@ -64,11 +73,29 @@ Circle = (radius) ->
     radius
   diameter = -> radius * 2
   circumference = -> diameter() * Math.PI
+  area = -> radius * radius * Math.PI
   # expose priveleged methods
   @radius = getSetRadius
   @diameter = diameter
   @circumference = circumference
+  @area = area
   @radius(radius)
+  undefined
+
+# crockfords durable object creation
+circle = (radius) ->
+  getSetRadius = ->
+    if arguments.length > 0
+      if arguments[0] < 0 then throw new TypeError("Radius should be >= 0")
+      radius = arguments[0]
+    radius
+  diameter = -> radius * 2
+  circumference = -> diameter() * Math.PI
+  area = -> radius * radius * Math.PI
+  radius: getSetRadius
+  diameter: diameter
+  area: area
+  circumference: circumference
 
 # Old notes, will likely be removed after next commit
 # without constructor property below, instances of this constructor
@@ -129,6 +156,8 @@ unless Function::inherit
       @::_super = superFn::
   )()
 
+
+
 Sphere = (radius) ->
   Circle.call(this, radius)
 
@@ -153,3 +182,6 @@ Sphere::area = ->
   circleProto.getRadius = getRadius
   circleProto.setRadius = setRadius
 )(Circle::)
+
+# Object.create is simpler than Function::inherit b/c it only needs to create
+# a single object whose prototype is linked to the object argument
