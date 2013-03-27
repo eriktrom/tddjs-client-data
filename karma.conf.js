@@ -21,12 +21,14 @@ files = [
 
   'vendor/jasmine-given.js',
 
-  // 'vendor/jquery-1.9.1.js',
-  // 'vendor/jasmine-jquery.js',
+  'vendor/jquery-1.9.1.js',
+  'vendor/jasmine-jquery.js',
 
   // 'vendor/sinon-1.6.0.js',
   // 'vendor/jasmine-sinon.js',
 
+  'coffee/object.coffee',
+  'coffee/tdd.coffee',
   'coffee/app.coffee',
   'coffee/test.coffee'
 
