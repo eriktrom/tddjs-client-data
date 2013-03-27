@@ -56,14 +56,54 @@ describe "Uid for objects", ->
 
 
 describe "a Circle", ->
+  Given -> @circle = new Circle(6)
+
   describe "created via constructor function", ->
-    Given -> @circ = new Circle(6)
-    Then -> expect(@circ).toBeInstanceOf Object
-    And -> expect(@circ).toBeInstanceOf Circle
-    And -> expect(@circ.constructor).toEqual Circle
+    Then -> expect(@circle).toBeInstanceOf Object
+    Then -> expect(@circle).toBeInstanceOf Circle
+    Then -> expect(@circle.constructor).toEqual Circle
+
   describe "created via object literal", ->
     Given -> @circ2 = radius: 6
     Then -> expect(@circ2).toBeInstanceOf Object
-    And -> expect(@circ2.constructor).toEqual Object
+    Then -> expect(@circ2.constructor).toEqual Object
 
+  describe "created via new @circle.constructor", ->
+    When -> @circle2 = new @circle.constructor(9)
+    Then -> expect(@circle2.constructor).toEqual @circle.constructor
+    Then -> expect(@circle2).toBeInstanceOf Circle
 
+  describe "inheriting properties from Circle.prototype", ->
+    Then -> expect(@circle.diameter()).toEqual 12
+    Then -> expect(@circle.circumference()).toEqual 37.69911184307752
+    Then -> expect(@circle.area()).toEqual 113.09733552923255
+
+  describe "constructor is Object when prototype is overridden", ->
+    Given -> @Circle = ->
+    When -> @Circle.prototype = {}
+    Then -> expect(new @Circle().constructor).toEqual Object
+
+  describe "calling prototype without 'new' returns undefined", ->
+    Given -> @circle = Circle(6)
+    Then -> expect(typeof @circle).not.toBe "undefined"
+    # the above is supposed to return undefined, I get "number"
+      # oh, that's because inside my Circle = -> definition, coffeescript
+      # returns the last expression, which is @radius = radius, which is a number
+    Then -> expect(@circle).not.toBeNumber() # see note ^^
+    Then -> expect(radius).toEqual 6 # this should be fixed with update to Circle, but its not
+    # ^^Oops! we've defined radius on global object
+
+describe "a Sphere", ->
+  Given -> @sphere = new Sphere(6)
+  Then -> expect(@sphere).toBeInstanceOf Sphere
+  Then -> expect(@sphere).toBeInstanceOf Circle
+  Then -> expect(@sphere).toBeInstanceOf Object
+  Then -> expect(@sphere.diameter()).toEqual 12
+
+describe "Function inherit", ->
+  Given ->
+    @SubFn = ->
+    @SuperFn = ->
+    @SubFn.inherit(@SuperFn)
+  it "should link prototypes", ->
+    expect(new @SubFn()).toBeInstanceOf @SuperFn
