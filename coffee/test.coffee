@@ -149,3 +149,33 @@ describe "creating more spheres based on existing", ->
     @sphere2 = Object.create(@sphere)
     @sphere2.radius = 10
     expect(Math.round(@sphere2.area())).toEqual 1257
+
+
+describe "Object Extend", ->
+  Given ->
+    @dummy =
+      setName: (name) ->
+        @name = name
+      getName: ->
+        @name || null
+    @object = {}
+
+    describe "it should copy properties", ->
+      When -> tddjs.extend(@object, @dummy)
+      Then -> expect(@object.getName).toBeFunction()
+      Then -> expect(@object.setName).toBeFunction()
+
+    describe "it should return a new object when the source is null", ->
+      When -> tddjs.extend(null, @dummy)
+      Then -> expect(@object.getName).toBeFunction()
+      Then -> expect(@object.setName).toBeFunction()
+
+    describe "it should return target untouched when no source given", ->
+      When ->
+        object = tddjs.extend({})
+        properties = []
+        for prop of object
+          if tddjs.isOwnProperty(object, prop)
+            properties.push(prop)
+        expect(properties.length).toEqual 0
+
