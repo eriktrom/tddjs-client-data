@@ -8,21 +8,21 @@ basePath = '';
 
 // list of files / patterns to load in the browser
 files = [
-  // QUNIT,
-  // QUNIT_ADAPTER,
+  QUNIT,
+  QUNIT_ADAPTER,
 
-  JASMINE,
-  JASMINE_ADAPTER,
+  // JASMINE,
+  // JASMINE_ADAPTER,
 
 
   // 'vendor/matchers.js',
-  'vendor/jasmine-matchers-1.1.0.js',
-  'vendor/my-matchers.js',
 
-  'vendor/jasmine-given.js',
-
-  'vendor/jquery-1.9.1.js',
-  'vendor/jasmine-jquery.js',
+  // current defaults when using jasmine
+  // 'vendor/jasmine-matchers-1.1.0.js',
+  // 'vendor/my-matchers.js',
+  // 'vendor/jasmine-given.js',
+  // 'vendor/jquery-1.9.1.js',
+  // 'vendor/jasmine-jquery.js',
 
   // 'vendor/sinon-1.6.0.js',
   // 'vendor/jasmine-sinon.js',

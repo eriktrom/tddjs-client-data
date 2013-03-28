@@ -9,21 +9,3 @@ tddjs = do ->
     object
 
   namespace: namespace
-
-
-do ->
-  dom = tddjs.namespace("dom")
-  addClassName = (element, cName) ->
-    regexp = new RegExp("(^|\\s)#{cName}(\\s|$)")
-    if element && !regexp.test(element.className)
-      cName = "#{element.className} #{cName}"
-      element.className = cName.replace(/^\s+|\s+$/g, "")
-
-  removeClassName = (element, cName) ->
-    r = new RegExp("(^|\\s)#{cName}(\\s|$)");
-    if element
-      cName = element.className.replace(r, " ");
-      element.className = cName.replace(/^\s+|\s+$/g, "");
-
-  dom.addClassName = addClassName
-  dom.removeClassName = removeClassName
