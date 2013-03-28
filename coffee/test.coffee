@@ -57,3 +57,48 @@ describe "A Tabbed Panel", ->
     it "should add js-tabs class name to element", ->
       @tabController.create(@tabs)
       expect(tabs).toHaveClass('js-tab-controller')
+
+  describe "tabController.activateTab", ->
+    beforeEach ->
+      @controller = @tabController.create(@tabs)
+      @links = @tabs.getElementsByTagName("a")
+      @lis = @tabs.getElementsByTagName("li")
+
+    it "should not fail without anchor", ->
+      expect(-> @controller.activateTab()).not.toThrow
+
+    it "should mark anchor as active", ->
+      @controller.activateTab(@links[0])
+      expect(@links[0]).toHaveClass("active-tab")
+
+    describe "should de-activate previous tab", ->
+      Given "the first tab is active", ->
+        @controller.activateTab(@links[0])
+      When "I activate a different tab", ->
+        @controller.activateTab(@links[1])
+      Then "The first tab should not be active", ->
+        expect(@links[0]).not.toMatch /(^|\s)active-tab(\s|$)/
+      Then "The activated tab should be active", ->
+        expect(@links[1]).toHaveClass("active-tab")
+
+    describe "should not activate unsupported element types", ->
+      Given "I activate a supported element type", ->
+        @controller.activateTab(@links[0])
+      When "I try to activate an unsupported element type", ->
+        @controller.activateTab(@lis[0])
+      Then "the supported element type should be active", ->
+        expect(@links[0]).toHaveClass("active-tab")
+      Then "the un-supported element type should NOT be active", ->
+        expect(@lis[0]).not.toMatch /(^|\s)active-tab(\s|$)/
+      Then "this is a duplicate, to try out not.toHaveClass", ->
+        expect(@lis[0]).not.toHaveClass("active-tab")
+
+    describe "should fire onTabChange", ->
+      Given -> @controller.activateTab(@links[0])
+      Given ->
+        @controller.onTabChange = (curr, prev) =>
+          @actualPrevious = prev
+          @actualCurrent = curr
+      When -> @controller.activateTab(@links[1])
+      Then -> expect(@links[0]).toEqual @actualPrevious
+      Then -> expect(@links[1]).toEqual @actualCurrent
