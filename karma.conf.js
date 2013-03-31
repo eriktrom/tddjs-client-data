@@ -27,10 +27,9 @@ files = [
   // 'vendor/sinon-1.6.0.js',
   // 'vendor/jasmine-sinon.js',
 
-  'coffee/object.coffee',
-  'coffee/tdd.coffee',
-  'coffee/app.coffee',
-  'coffee/test.coffee'
+  'public/lib/*.js',
+  'public/app/*.js',
+  'public/test/*.js'
 
   // to use source maps, use coffeescript compiler
   // `coffee -o js/ -cwbm coffee/`

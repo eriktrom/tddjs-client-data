@@ -18,6 +18,16 @@ beforeEach(function() {
 });
 
 
+// jasmine.Env.prototype.contains_ = function(haystack, needle) {
+//   if (jasmine.isArray_(haystack)) {
+//     for (var i = 0; i < haystack.length; i++) {
+//       if (this.equals_(haystack[i], needle)) return true;
+//     }
+//     return false;
+//   }
+//   return haystack.indexOf(needle) >= 0;
+// };
+
 
 
 // currently available matcher list
