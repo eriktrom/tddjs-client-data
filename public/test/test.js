@@ -71,3 +71,19 @@ test("it should notify all even when some fail", function() {
   this.observable.notifyObservers();
   return ok(observer2.called);
 });
+
+test("it should call observers in the order they were added", function() {
+  var calls, observer1, observer2;
+  calls = [];
+  observer1 = function() {
+    return calls.push(observer1);
+  };
+  observer2 = function() {
+    return calls.push(observer2);
+  };
+  this.observable.addObserver(observer1);
+  this.observable.addObserver(observer2);
+  this.observable.notifyObservers();
+  ok(observer1 === calls[0]);
+  return ok(observer2 === calls[1]);
+});

@@ -60,3 +60,15 @@ test "it should notify all even when some fail", ->
   @observable.notifyObservers()
 
   ok(observer2.called)
+
+test "it should call observers in the order they were added", ->
+  calls = []
+  observer1 = -> calls.push(observer1)
+  observer2 = -> calls.push(observer2)
+
+  @observable.addObserver(observer1)
+  @observable.addObserver(observer2)
+  @observable.notifyObservers()
+
+  ok(observer1 is calls[0])
+  ok(observer2 is calls[1])
