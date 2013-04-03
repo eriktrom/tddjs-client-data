@@ -11,6 +11,11 @@ test "it adds observers", ->
 
   deepEqual(observable.observers, observers)
 
+  # this was his refactoring, it looks like coupling to me - what if we
+  # move or change hasObserver? this will fail and we'll have to fix it
+  ok(observable.hasObserver(observers[0]))
+  ok(observable.hasObserver(observers[1]))
+
 module "Observable#hasObserver"
 
 test "it returns true when it has observer(s)", ->

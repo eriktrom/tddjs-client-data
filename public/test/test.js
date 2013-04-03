@@ -10,7 +10,9 @@ test("it adds observers", function() {
   observers = [observer1, observer2];
   observable.addObserver(observers[0]);
   observable.addObserver(observers[1]);
-  return deepEqual(observable.observers, observers);
+  deepEqual(observable.observers, observers);
+  ok(observable.hasObserver(observers[0]));
+  return ok(observable.hasObserver(observers[1]));
 });
 
 module("Observable#hasObserver");
