@@ -1,11 +1,18 @@
 tddjs.namespace("util")
 
 do ->
-  Observable = ->
+  `
+  function Observable() {
 
-  addObserver = (observer) ->
-    @observers = [observer]
+  }
+
+  function addObserver(observer) {
+    this.observers = [observer]
+  }
+  `
 
   Observable::addObserver = addObserver
 
+
   tddjs.util.Observable = Observable
+  return

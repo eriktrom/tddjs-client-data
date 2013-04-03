@@ -1,6 +1,6 @@
 module "ObservableAddObserverTest"
 
-test "it should store function", ->
+test "it should store a function", ->
   observable = new tddjs.util.Observable()
   observer = ->
 
