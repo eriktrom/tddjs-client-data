@@ -1,18 +1,42 @@
 
+
+
 do ->
   module "Observable"
 
-  Observable = ->
+  class Observable
+    constructor: ->
+      @observers = []
+    addObserver: (observer) ->
+      @observers.push(observer)
+    # @observers = []
 
-  test "add observer to observable", ->
+    # addObserver: (observer) ->
+    #   @observers.push(observer)
+
+  # Observable = ->
+  #   @observers = []
+
+  #   Observable::addObserver = (observer) ->
+  #     @observers.push(observer)
+  #     return
+
+  #   return
+
+  test "add observer to observable", -> 
     # Given - create observable object
-    observable = new Observable() 
+    observable = new Observable()
+    observerDbl = {} # nothing fancy, just want to check object identity later
+
     # When - add an observer by calling addObserver on observable
     observable.addObserver(observerDbl)
-    # Then - verify that observer is stored inside observers array
+
+    # Then - verify that observer is ostored inside observers array
     # observable.observers.includes(observerDbl)
-    ok(observable.observers[0] is observerDbl) 
+    ok(observable.observers[0] is observerDbl)
+    # and that its the only item in that array (necessary?)
     ok(observable.observers.length is 1)
 
-    # this makes assumption that observable keeps its observers in an array
-    # named observers (a better name for this array might be listeners/subscribers)
+  test "observable has an observers array", ->
+    observable = new Observable()
+    ok(observable.observers instanceof Array)

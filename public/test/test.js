@@ -3,12 +3,30 @@
 (function() {
   var Observable;
   module("Observable");
-  Observable = function() {};
-  return test("add observer to observable", function() {
-    var observable;
+  Observable = (function() {
+
+    function Observable() {
+      this.observers = [];
+    }
+
+    Observable.prototype.addObserver = function(observer) {
+      return this.observers.push(observer);
+    };
+
+    return Observable;
+
+  })();
+  test("add observer to observable", function() {
+    var observable, observerDbl;
     observable = new Observable();
+    observerDbl = {};
     observable.addObserver(observerDbl);
     ok(observable.observers[0] === observerDbl);
     return ok(observable.observers.length === 1);
+  });
+  return test("observable has an observers array", function() {
+    var observable;
+    observable = new Observable();
+    return ok(observable.observers instanceof Array);
   });
 })();
