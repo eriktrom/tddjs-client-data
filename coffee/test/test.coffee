@@ -1,4 +1,4 @@
-module "Observable",
+module "Observable#addObserver",
   setup: ->
     @observable = new tddjs.util.Observable()
 
@@ -15,6 +15,10 @@ test "it adds observers", ->
   ok(@observable.hasObserver(observers[0]))
   ok(@observable.hasObserver(observers[1]))
 
+module "Observable#hasObserver",
+  setup: ->
+    @observable = new tddjs.util.Observable()
+
 test "it returns true when it has observer(s)", ->
   observer = ->
 
@@ -25,7 +29,10 @@ test "it returns true when it has observer(s)", ->
 test "it returns false when it has no observer(s)", ->
   ok !(@observable.hasObserver(->))
 
-
+module "Observable#notifyObservers",
+  setup: ->
+    @observable = new tddjs.util.Observable()
+    
 test "it calls all observers", ->
   observer1 = -> observer1.called = true
   observer2 = -> observer2.called = true
