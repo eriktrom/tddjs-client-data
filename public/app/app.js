@@ -3,14 +3,11 @@
 tddjs.namespace("util");
 
 (function() {
-  
-  function Observable() {
-
-  }
-
-  function addObserver(observer) {
-    this.observers = [observer]
-  }
-  ;  Observable.prototype.addObserver = addObserver;
+  var Observable, addObserver;
+  Observable = function() {};
+  addObserver = function(observer) {
+    return this.observers = [observer];
+  };
+  Observable.prototype.addObserver = addObserver;
   tddjs.util.Observable = Observable;
 })();
