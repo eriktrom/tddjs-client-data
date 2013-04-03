@@ -5,8 +5,8 @@ module "Observable#observe",
 test "it adds observers", ->
   observers = [(->), (->)]
 
-  @observable.observe(observers[0])
-  @observable.observe(observers[1])
+  @observable.observe("event", observers[0])
+  @observable.observe("event", observers[1])
 
   deepEqual(@observable.observers, observers)
 
@@ -25,7 +25,7 @@ module "Observable#hasObserver",
 test "it returns true when it has observer(s)", ->
   observer = ->
 
-  @observable.observe(observer)
+  @observable.observe("event", observer)
 
   ok(@observable.hasObserver(observer))
 
@@ -43,8 +43,8 @@ test "it calls all observers", ->
   observer1 = -> observer1.called = true
   observer2 = -> observer2.called = true
 
-  @observable.observe(observer1)
-  @observable.observe(observer2)
+  @observable.observe("event", observer1)
+  @observable.observe("event", observer2)
   @observable.notify()
 
   ok(observer1.called)
@@ -53,7 +53,7 @@ test "it calls all observers", ->
 test "it should pass through arguments", ->
   actual = null
 
-  @observable.observe -> actual = arguments
+  @observable.observe "event", -> actual = arguments
 
   @observable.notify("String", 1, 32)
 
@@ -61,15 +61,15 @@ test "it should pass through arguments", ->
 
 test "it should throw for uncallable observer", ->
   throws ->
-    @observable.observe({})
+    @observable.observe("event", {})
   , TypeError
 
 test "it should notify all even when some fail", ->
   observer1 = -> throw new Error("Oops")
   observer2 = -> observer2.called = true
 
-  @observable.observe(observer1)
-  @observable.observe(observer2)
+  @observable.observe("event", observer1)
+  @observable.observe("event", observer2)
   @observable.notify()
 
   ok(observer2.called)
@@ -79,8 +79,8 @@ test "it should call observers in the order they were added", ->
   observer1 = -> calls.push(observer1)
   observer2 = -> calls.push(observer2)
 
-  @observable.observe(observer1)
-  @observable.observe(observer2)
+  @observable.observe("event", observer1)
+  @observable.observe("event", observer2)
   @observable.notify()
 
   ok(observer1 is calls[0])

@@ -2,7 +2,7 @@
 
 (function() {
   var hasObserver, notify, observe;
-  observe = function(observer) {
+  observe = function(event, observer) {
     if (!this.observers) {
       this.observers = [];
     }

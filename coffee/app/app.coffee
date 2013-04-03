@@ -1,6 +1,6 @@
 do ->
 
-  observe = (observer) ->
+  observe = (event, observer) ->
     unless @observers then @observers = []
     if typeof observer isnt "function"
       throw new TypeError("observer is not a function")

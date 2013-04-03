@@ -9,8 +9,8 @@ module("Observable#observe", {
 test("it adds observers", function() {
   var observers;
   observers = [(function() {}), (function() {})];
-  this.observable.observe(observers[0]);
-  this.observable.observe(observers[1]);
+  this.observable.observe("event", observers[0]);
+  this.observable.observe("event", observers[1]);
   deepEqual(this.observable.observers, observers);
   ok(this.observable.hasObserver(observers[0]));
   return ok(this.observable.hasObserver(observers[1]));
@@ -25,7 +25,7 @@ module("Observable#hasObserver", {
 test("it returns true when it has observer(s)", function() {
   var observer;
   observer = function() {};
-  this.observable.observe(observer);
+  this.observable.observe("event", observer);
   return ok(this.observable.hasObserver(observer));
 });
 
@@ -47,8 +47,8 @@ test("it calls all observers", function() {
   observer2 = function() {
     return observer2.called = true;
   };
-  this.observable.observe(observer1);
-  this.observable.observe(observer2);
+  this.observable.observe("event", observer1);
+  this.observable.observe("event", observer2);
   this.observable.notify();
   ok(observer1.called);
   return ok(observer2.called);
@@ -57,7 +57,7 @@ test("it calls all observers", function() {
 test("it should pass through arguments", function() {
   var actual;
   actual = null;
-  this.observable.observe(function() {
+  this.observable.observe("event", function() {
     return actual = arguments;
   });
   this.observable.notify("String", 1, 32);
@@ -66,7 +66,7 @@ test("it should pass through arguments", function() {
 
 test("it should throw for uncallable observer", function() {
   return throws(function() {
-    return this.observable.observe({});
+    return this.observable.observe("event", {});
   }, TypeError);
 });
 
@@ -78,8 +78,8 @@ test("it should notify all even when some fail", function() {
   observer2 = function() {
     return observer2.called = true;
   };
-  this.observable.observe(observer1);
-  this.observable.observe(observer2);
+  this.observable.observe("event", observer1);
+  this.observable.observe("event", observer2);
   this.observable.notify();
   return ok(observer2.called);
 });
@@ -93,8 +93,8 @@ test("it should call observers in the order they were added", function() {
   observer2 = function() {
     return calls.push(observer2);
   };
-  this.observable.observe(observer1);
-  this.observable.observe(observer2);
+  this.observable.observe("event", observer1);
+  this.observable.observe("event", observer2);
   this.observable.notify();
   ok(observer1 === calls[0]);
   return ok(observer2 === calls[1]);
