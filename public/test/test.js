@@ -12,8 +12,8 @@ test("it adds observers", function() {
   this.observable.observe("event", observers[0]);
   this.observable.observe("event", observers[1]);
   deepEqual(this.observable.observers, observers);
-  ok(this.observable.hasObserver(observers[0]));
-  return ok(this.observable.hasObserver(observers[1]));
+  ok(this.observable.hasObserver("event", observers[0]));
+  return ok(this.observable.hasObserver("event", observers[1]));
 });
 
 module("Observable#hasObserver", {
@@ -26,11 +26,11 @@ test("it returns true when it has observer(s)", function() {
   var observer;
   observer = function() {};
   this.observable.observe("event", observer);
-  return ok(this.observable.hasObserver(observer));
+  return ok(this.observable.hasObserver("event", observer));
 });
 
 test("it returns false when it has no observer(s)", function() {
-  return ok(!(this.observable.hasObserver(function() {})));
+  return ok(!(this.observable.hasObserver("event", function() {})));
 });
 
 module("Observable#notify", {
@@ -49,7 +49,7 @@ test("it calls all observers", function() {
   };
   this.observable.observe("event", observer1);
   this.observable.observe("event", observer2);
-  this.observable.notify();
+  this.observable.notify("event");
   ok(observer1.called);
   return ok(observer2.called);
 });
@@ -60,7 +60,7 @@ test("it should pass through arguments", function() {
   this.observable.observe("event", function() {
     return actual = arguments;
   });
-  this.observable.notify("String", 1, 32);
+  this.observable.notify("event", "String", 1, 32);
   return deepEqual(Array.prototype.slice.call(actual, 0), ["String", 1, 32]);
 });
 
@@ -80,7 +80,7 @@ test("it should notify all even when some fail", function() {
   };
   this.observable.observe("event", observer1);
   this.observable.observe("event", observer2);
-  this.observable.notify();
+  this.observable.notify("event");
   return ok(observer2.called);
 });
 
@@ -95,11 +95,11 @@ test("it should call observers in the order they were added", function() {
   };
   this.observable.observe("event", observer1);
   this.observable.observe("event", observer2);
-  this.observable.notify();
+  this.observable.notify("event");
   ok(observer1 === calls[0]);
   return ok(observer2 === calls[1]);
 });
 
 test("it should not fail if no observers", function() {
-  return ok(!(this.observable.notify()));
+  return ok(!(this.observable.notify("event")));
 });

@@ -12,8 +12,8 @@ test "it adds observers", ->
 
   # this was his refactoring, it looks like coupling to me - what if we
   # move or change hasObserver? this will fail and we'll have to fix it
-  ok(@observable.hasObserver(observers[0]))
-  ok(@observable.hasObserver(observers[1]))
+  ok(@observable.hasObserver("event", observers[0]))
+  ok(@observable.hasObserver("event", observers[1]))
 
 
 
@@ -27,10 +27,10 @@ test "it returns true when it has observer(s)", ->
 
   @observable.observe("event", observer)
 
-  ok(@observable.hasObserver(observer))
+  ok(@observable.hasObserver("event", observer))
 
 test "it returns false when it has no observer(s)", ->
-  ok !(@observable.hasObserver(->))
+  ok !(@observable.hasObserver("event", ->))
 
 
 
@@ -45,7 +45,7 @@ test "it calls all observers", ->
 
   @observable.observe("event", observer1)
   @observable.observe("event", observer2)
-  @observable.notify()
+  @observable.notify("event")
 
   ok(observer1.called)
   ok(observer2.called)
@@ -55,7 +55,7 @@ test "it should pass through arguments", ->
 
   @observable.observe "event", -> actual = arguments
 
-  @observable.notify("String", 1, 32)
+  @observable.notify("event", "String", 1, 32)
 
   deepEqual(Array::slice.call(actual, 0), ["String", 1, 32])
 
@@ -70,7 +70,7 @@ test "it should notify all even when some fail", ->
 
   @observable.observe("event", observer1)
   @observable.observe("event", observer2)
-  @observable.notify()
+  @observable.notify("event")
 
   ok(observer2.called)
 
@@ -81,10 +81,10 @@ test "it should call observers in the order they were added", ->
 
   @observable.observe("event", observer1)
   @observable.observe("event", observer2)
-  @observable.notify()
+  @observable.notify("event")
 
   ok(observer1 is calls[0])
   ok(observer2 is calls[1])
 
 test "it should not fail if no observers", ->
-  ok !(@observable.notify())
+  ok !(@observable.notify("event"))

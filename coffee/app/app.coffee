@@ -6,17 +6,18 @@ do ->
       throw new TypeError("observer is not a function")
     @observers.push(observer)
 
-  hasObserver = (observer) ->
+  hasObserver = (event, observer) ->
     return false unless @observers
     for obsvr in @observers
       return true if obsvr is observer
     false
 
-  notify = ->
+  notify = (event) ->
     return unless @observers
+    args = Array::slice.call(arguments, 1)
     for obsvr in @observers
       try
-        obsvr.apply(@, arguments)
+        obsvr.apply(@, args)
       catch e
         # its observers responsibility to handle errors properly, pg 233
         

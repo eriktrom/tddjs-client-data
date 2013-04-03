@@ -11,7 +11,7 @@
     }
     return this.observers.push(observer);
   };
-  hasObserver = function(observer) {
+  hasObserver = function(event, observer) {
     var obsvr, _i, _len, _ref;
     if (!this.observers) {
       return false;
@@ -25,17 +25,18 @@
     }
     return false;
   };
-  notify = function() {
-    var obsvr, _i, _len, _ref, _results;
+  notify = function(event) {
+    var args, obsvr, _i, _len, _ref, _results;
     if (!this.observers) {
       return;
     }
+    args = Array.prototype.slice.call(arguments, 1);
     _ref = this.observers;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       obsvr = _ref[_i];
       try {
-        _results.push(obsvr.apply(this, arguments));
+        _results.push(obsvr.apply(this, args));
       } catch (e) {
 
       }
