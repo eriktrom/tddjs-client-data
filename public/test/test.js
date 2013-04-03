@@ -3,11 +3,9 @@
 module("Observable#addObserver");
 
 test("it adds observers", function() {
-  var observable, observer1, observer2, observers;
+  var observable, observers;
   observable = new tddjs.util.Observable();
-  observer1 = function() {};
-  observer2 = function() {};
-  observers = [observer1, observer2];
+  observers = [(function() {}), (function() {})];
   observable.addObserver(observers[0]);
   observable.addObserver(observers[1]);
   deepEqual(observable.observers, observers);
