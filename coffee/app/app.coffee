@@ -1,6 +1,6 @@
 do ->
 
-  addObserver = (observer) ->
+  observe = (observer) ->
     unless @observers then @observers = []
     if typeof observer isnt "function"
       throw new TypeError("observer is not a function")
@@ -12,7 +12,7 @@ do ->
       return true if obsvr is observer
     false
 
-  notifyObservers = ->
+  notify = ->
     return unless @observers
     for obsvr in @observers
       try
@@ -22,9 +22,9 @@ do ->
         
 
   tddjs.namespace("util").observable = {
-    addObserver
+    observe
     hasObserver
-    notifyObservers
+    notify
   }
 
 
@@ -40,7 +40,7 @@ do ->
 #   constructor: ->
 #     @observers = []
 
-#   addObserver: (observer) ->
+#   observe: (observer) ->
 #     @observers.push(observer)
 
 #   tddjs.util.Observable = Observable
