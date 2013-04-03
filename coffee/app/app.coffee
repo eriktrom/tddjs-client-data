@@ -1,21 +1,19 @@
-tddjs.namespace("util")
-
 do ->
-  Observable = ->
-    @observers = []
-    return
 
-  Observable::addObserver = (observer) ->
+  addObserver = (observer) ->
+    unless @observers then @observers = []
     if typeof observer isnt "function"
       throw new TypeError("observer is not a function")
     @observers.push(observer)
 
-  Observable::hasObserver = (observer) ->
+  hasObserver = (observer) ->
+    return false unless @observers
     for obsvr in @observers
       return true if obsvr is observer
     false
 
-  Observable::notifyObservers = ->
+  notifyObservers = ->
+    return unless @observers
     for obsvr in @observers
       try
         obsvr.apply(@, arguments)
@@ -23,19 +21,11 @@ do ->
         # its observers responsibility to handle errors properly, pg 233
         
 
-  tddjs.util.Observable = Observable
-
-
-
-
-
-
-
-
-
-
-
-
+  tddjs.namespace("util").observable = {
+    addObserver
+    hasObserver
+    notifyObservers
+  }
 
 
 

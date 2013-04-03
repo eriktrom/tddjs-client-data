@@ -1,6 +1,6 @@
 module "Observable#addObserver",
   setup: ->
-    @observable = new tddjs.util.Observable()
+    @observable = Object.create(tddjs.util.observable)
 
 test "it adds observers", ->
   observers = [(->), (->)]
@@ -15,9 +15,12 @@ test "it adds observers", ->
   ok(@observable.hasObserver(observers[0]))
   ok(@observable.hasObserver(observers[1]))
 
+
+
+
 module "Observable#hasObserver",
   setup: ->
-    @observable = new tddjs.util.Observable()
+    @observable = Object.create(tddjs.util.observable)
 
 test "it returns true when it has observer(s)", ->
   observer = ->
@@ -29,10 +32,13 @@ test "it returns true when it has observer(s)", ->
 test "it returns false when it has no observer(s)", ->
   ok !(@observable.hasObserver(->))
 
+
+
+
 module "Observable#notifyObservers",
   setup: ->
-    @observable = new tddjs.util.Observable()
-    
+    @observable = Object.create(tddjs.util.observable)
+
 test "it calls all observers", ->
   observer1 = -> observer1.called = true
   observer2 = -> observer2.called = true
@@ -79,3 +85,6 @@ test "it should call observers in the order they were added", ->
 
   ok(observer1 is calls[0])
   ok(observer2 is calls[1])
+
+test "it should not fail if no observers", ->
+  ok !(@observable.notifyObservers())

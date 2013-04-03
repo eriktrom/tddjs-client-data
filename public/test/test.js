@@ -2,7 +2,7 @@
 
 module("Observable#addObserver", {
   setup: function() {
-    return this.observable = new tddjs.util.Observable();
+    return this.observable = Object.create(tddjs.util.observable);
   }
 });
 
@@ -18,7 +18,7 @@ test("it adds observers", function() {
 
 module("Observable#hasObserver", {
   setup: function() {
-    return this.observable = new tddjs.util.Observable();
+    return this.observable = Object.create(tddjs.util.observable);
   }
 });
 
@@ -35,7 +35,7 @@ test("it returns false when it has no observer(s)", function() {
 
 module("Observable#notifyObservers", {
   setup: function() {
-    return this.observable = new tddjs.util.Observable();
+    return this.observable = Object.create(tddjs.util.observable);
   }
 });
 
@@ -98,4 +98,8 @@ test("it should call observers in the order they were added", function() {
   this.observable.notifyObservers();
   ok(observer1 === calls[0]);
   return ok(observer2 === calls[1]);
+});
+
+test("it should not fail if no observers", function() {
+  return ok(!(this.observable.notifyObservers()));
 });
