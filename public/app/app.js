@@ -8,6 +8,9 @@ tddjs.namespace("util");
     this.observers = [];
   };
   Observable.prototype.addObserver = function(observer) {
+    if (typeof observer !== "function") {
+      throw new TypeError("observer is not a function");
+    }
     return this.observers.push(observer);
   };
   Observable.prototype.hasObserver = function(observer) {

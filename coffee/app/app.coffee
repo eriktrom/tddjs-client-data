@@ -6,6 +6,8 @@ do ->
     return
 
   Observable::addObserver = (observer) ->
+    if typeof observer isnt "function"
+      throw new TypeError("observer is not a function")
     @observers.push(observer)
 
   Observable::hasObserver = (observer) ->

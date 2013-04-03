@@ -52,3 +52,10 @@ test "it should pass through arguments", ->
   observable.notifyObservers("String", 1, 32)
 
   deepEqual(Array::slice.call(actual, 0), ["String", 1, 32])
+
+test "it should throw for uncallable observer", ->
+  observable = new tddjs.util.Observable()
+
+  throws ->
+    observable.addObserver({})
+  , TypeError

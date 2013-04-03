@@ -57,3 +57,11 @@ test("it should pass through arguments", function() {
   observable.notifyObservers("String", 1, 32);
   return deepEqual(Array.prototype.slice.call(actual, 0), ["String", 1, 32]);
 });
+
+test("it should throw for uncallable observer", function() {
+  var observable;
+  observable = new tddjs.util.Observable();
+  return throws(function() {
+    return observable.addObserver({});
+  }, TypeError);
+});
