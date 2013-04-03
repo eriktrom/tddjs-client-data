@@ -42,3 +42,13 @@ test "it calls all observers", ->
 
   ok(observer1.called)
   ok(observer2.called)
+
+test "it should pass through arguments", ->
+  observable = new tddjs.util.Observable()
+  actual = null
+
+  observable.addObserver -> actual = arguments
+
+  observable.notifyObservers("String", 1, 32)
+
+  deepEqual(Array::slice.call(actual, 0), ["String", 1, 32])

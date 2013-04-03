@@ -15,7 +15,7 @@ do ->
 
   Observable::notifyObservers = ->
     for obsvr in @observers
-      obsvr()
+      obsvr.apply(@, arguments)
 
   tddjs.util.Observable = Observable
 

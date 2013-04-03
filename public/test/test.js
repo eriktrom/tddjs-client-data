@@ -46,3 +46,14 @@ test("it calls all observers", function() {
   ok(observer1.called);
   return ok(observer2.called);
 });
+
+test("it should pass through arguments", function() {
+  var actual, observable;
+  observable = new tddjs.util.Observable();
+  actual = null;
+  observable.addObserver(function() {
+    return actual = arguments;
+  });
+  observable.notifyObservers("String", 1, 32);
+  return deepEqual(Array.prototype.slice.call(actual, 0), ["String", 1, 32]);
+});
