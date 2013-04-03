@@ -28,3 +28,21 @@ test("it returns false when it has no observer(s)", function() {
   observable = new tddjs.util.Observable();
   return ok(!(observable.hasObserver(function() {})));
 });
+
+module("Observable Notify Observers");
+
+test("it calls all observers", function() {
+  var observable, observer1, observer2;
+  observable = new tddjs.util.Observable();
+  observer1 = function() {
+    return observer1.called = true;
+  };
+  observer2 = function() {
+    return observer2.called = true;
+  };
+  observable.addObserver(observer1);
+  observable.addObserver(observer2);
+  observable.notifyObservers();
+  ok(observer1.called);
+  return ok(observer2.called);
+});

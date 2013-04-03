@@ -21,5 +21,15 @@ tddjs.namespace("util");
     }
     return false;
   };
+  Observable.prototype.notifyObservers = function() {
+    var obsvr, _i, _len, _ref, _results;
+    _ref = this.observers;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      obsvr = _ref[_i];
+      _results.push(obsvr());
+    }
+    return _results;
+  };
   return tddjs.util.Observable = Observable;
 })();

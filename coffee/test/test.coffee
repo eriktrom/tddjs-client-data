@@ -28,3 +28,17 @@ test "it returns false when it has no observer(s)", ->
   observable = new tddjs.util.Observable()
 
   ok !(observable.hasObserver(->))
+
+module "Observable Notify Observers"
+
+test "it calls all observers", ->
+  observable = new tddjs.util.Observable()
+  observer1 = -> observer1.called = true
+  observer2 = -> observer2.called = true
+
+  observable.addObserver(observer1)
+  observable.addObserver(observer2)
+  observable.notifyObservers()
+
+  ok(observer1.called)
+  ok(observer2.called)

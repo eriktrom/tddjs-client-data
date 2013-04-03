@@ -12,9 +12,33 @@ do ->
     for obsvr in @observers
       return true if obsvr is observer
     false
-    # @observers.indexOf(observer) >= 0
+
+  Observable::notifyObservers = ->
+    for obsvr in @observers
+      obsvr()
 
   tddjs.util.Observable = Observable
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # class Observable
 #   constructor: ->
