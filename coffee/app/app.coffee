@@ -9,7 +9,10 @@ do ->
     @observers.push(observer)
 
   Observable::hasObserver = (observer) ->
-    @observers.indexOf(observer) >= 0
+    for obsvr in @observers
+      return true if obsvr is observer
+    false
+    # @observers.indexOf(observer) >= 0
 
   tddjs.util.Observable = Observable
 

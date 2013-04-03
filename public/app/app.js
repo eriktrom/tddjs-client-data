@@ -11,7 +11,15 @@ tddjs.namespace("util");
     return this.observers.push(observer);
   };
   Observable.prototype.hasObserver = function(observer) {
-    return this.observers.indexOf(observer) >= 0;
+    var obsvr, _i, _len, _ref;
+    _ref = this.observers;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      obsvr = _ref[_i];
+      if (obsvr === observer) {
+        return true;
+      }
+    }
+    return false;
   };
   return tddjs.util.Observable = Observable;
 })();
