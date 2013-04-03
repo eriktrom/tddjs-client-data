@@ -17,7 +17,11 @@ do ->
 
   Observable::notifyObservers = ->
     for obsvr in @observers
-      obsvr.apply(@, arguments)
+      try
+        obsvr.apply(@, arguments)
+      catch e
+        # its observers responsibility to handle errors properly, pg 233
+        
 
   tddjs.util.Observable = Observable
 

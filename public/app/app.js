@@ -30,7 +30,11 @@ tddjs.namespace("util");
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       obsvr = _ref[_i];
-      _results.push(obsvr.apply(this, arguments));
+      try {
+        _results.push(obsvr.apply(this, arguments));
+      } catch (e) {
+
+      }
     }
     return _results;
   };
