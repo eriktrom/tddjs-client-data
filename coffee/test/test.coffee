@@ -1,4 +1,4 @@
-module "Observable"
+module "Observable#addObserver"
 
 test "it adds observers", ->
   observable = new tddjs.util.Observable()
@@ -10,3 +10,18 @@ test "it adds observers", ->
   observable.addObserver(observers[1])
 
   deepEqual(observable.observers, observers)
+
+module "Observable#hasObserver"
+
+test "it returns true when it has observer(s)", ->
+  observable = new tddjs.util.Observable()
+  observer = ->
+
+  observable.addObserver(observer)
+
+  ok(observable.hasObserver(observer))
+
+test "it returns false when it has no observer(s)", ->
+  observable = new tddjs.util.Observable()
+
+  ok !(observable.hasObserver(->))
