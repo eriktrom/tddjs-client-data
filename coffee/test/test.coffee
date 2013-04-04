@@ -8,7 +8,7 @@ test "it adds observers", ->
   @observable.observe("event", observers[0])
   @observable.observe("event", observers[1])
 
-  deepEqual(@observable.observers, observers)
+  # deepEqual(@observable.observers, observers)
 
   # this was his refactoring, it looks like coupling to me - what if we
   # move or change hasObserver? this will fail and we'll have to fix it
@@ -88,3 +88,11 @@ test "it should call observers in the order they were added", ->
 
 test "it should not fail if no observers", ->
   ok !(@observable.notify("event"))
+
+test "it should notify only relevant observers", ->
+  calls = []
+  @observable.observe "event", -> calls.push("event")
+  @observable.observe "other", -> calls.push("other")
+  @observable.notify("other")
+
+  deepEqual(calls, ["other"])

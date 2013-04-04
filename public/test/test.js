@@ -11,7 +11,6 @@ test("it adds observers", function() {
   observers = [(function() {}), (function() {})];
   this.observable.observe("event", observers[0]);
   this.observable.observe("event", observers[1]);
-  deepEqual(this.observable.observers, observers);
   ok(this.observable.hasObserver("event", observers[0]));
   return ok(this.observable.hasObserver("event", observers[1]));
 });
@@ -102,4 +101,17 @@ test("it should call observers in the order they were added", function() {
 
 test("it should not fail if no observers", function() {
   return ok(!(this.observable.notify("event")));
+});
+
+test("it should notify only relevant observers", function() {
+  var calls;
+  calls = [];
+  this.observable.observe("event", function() {
+    return calls.push("event");
+  });
+  this.observable.observe("other", function() {
+    return calls.push("other");
+  });
+  this.observable.notify("other");
+  return deepEqual(calls, ["other"]);
 });
