@@ -33,7 +33,7 @@ files = [
   'public/test/*.js'
 
   // to use source maps, use coffeescript compiler
-  // `coffee -o js/ -cwbm coffee/`
+  // `coffee -o public/ -cwbl coffee/`
   // 'js/app.js',
   // 'js/test.js'
 ];
