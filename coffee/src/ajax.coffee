@@ -5,8 +5,8 @@ tddjs.namespace("ajax").create = ->
   ]
 
   for value in options
-    try # duplication in code execution, runs everytime, fix by figuring out
-      return value() # which object is available before defining it
+    try              # duplication in code execution, runs everytime, fix by
+      return value() # figuring out which object is available before defining it
     catch e
 
   return null
