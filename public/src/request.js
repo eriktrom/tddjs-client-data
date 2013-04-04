@@ -4,9 +4,11 @@
   var ajax, get;
   ajax = tddjs.namespace("ajax");
   get = function(url) {
+    var transport;
     if (typeof url !== "string") {
       throw new TypeError("URL should be string");
     }
+    return transport = ajax.create();
   };
   return ajax.get = get;
 })();

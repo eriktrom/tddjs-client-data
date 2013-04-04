@@ -1,7 +1,7 @@
 do ->
   ajax = tddjs.ajax
 
-  module "Ajax Create"
+  module "Ajax Create",
 
   test "it should return XMLHttpRequest object", ->
     xhr = ajax.create()
@@ -10,3 +10,4 @@ do ->
     ok(tddjs.isHostMethod(xhr, "open"))
     ok(tddjs.isHostMethod(xhr, "send"))
     ok(tddjs.isHostMethod(xhr, "setRequestHeader"))
+

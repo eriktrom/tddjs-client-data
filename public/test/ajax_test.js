@@ -3,13 +3,12 @@
 (function() {
   var ajax;
   ajax = tddjs.ajax;
-  module("Ajax Create");
-  return test("it should return XMLHttpRequest object", function() {
+  return module("Ajax Create", test("it should return XMLHttpRequest object", function() {
     var xhr;
     xhr = ajax.create();
     tddjs.util.matchers.okNumber(xhr.readyState);
     ok(tddjs.isHostMethod(xhr, "open"));
     ok(tddjs.isHostMethod(xhr, "send"));
     return ok(tddjs.isHostMethod(xhr, "setRequestHeader"));
-  });
+  }));
 })();
