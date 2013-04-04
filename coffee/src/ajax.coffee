@@ -1,12 +1,21 @@
-tddjs.namespace("ajax").create = ->
+do ->
+  xhr = null
+  ajax = tddjs.namespace("ajax")
+
   options = [
     -> new ActiveXObject("Microsoft.XMLHTTP"),
     -> new XMLHttpRequest()
   ]
 
-  for value in options
-    try              # duplication in code execution, runs everytime, fix by
-      return value() # figuring out which object is available before defining it
-    catch e
+  for option in options
+    try
+      xhr = option()
 
-  return null
+      if typeof xhr.readyState is "number" &&
+      tddjs.isHostMethod(xhr, "open") &&
+      tddjs.isHostMethod(xhr, "send") &&
+      tddjs.isHostMethod(xhr, "setRequestHeader")
+        ajax.create = option
+        break
+    catch e
+  return
