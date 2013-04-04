@@ -8,7 +8,8 @@
     if (typeof url !== "string") {
       throw new TypeError("URL should be string");
     }
-    return transport = ajax.create();
+    transport = tddjs.ajax.create();
+    transport.open("GET", url, true);
   };
   return ajax.get = get;
 })();

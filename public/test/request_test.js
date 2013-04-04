@@ -19,9 +19,24 @@
       return ajax.get();
     }, TypeError);
   });
-  return test("it should obtain an XMLHttpRequest object", function() {
-    ajax.create = stubFn();
+  test("it should obtain an XMLHttpRequest object", function() {
+    ajax.create = stubFn({
+      open: function() {}
+    });
     ajax.get("/url");
     return ok(ajax.create.called);
+  });
+  return test("it should call open with method, url, async flag", function() {
+    var actual, url;
+    actual = "hello";
+    ajax.create = stubFn({
+      open: function() {
+        return actual = arguments;
+      }
+    });
+    url = "/url";
+    ajax.get(url);
+    actual = Array.prototype.slice.call(actual);
+    return deepEqual(actual, ["GET", url, true]);
   });
 })();
