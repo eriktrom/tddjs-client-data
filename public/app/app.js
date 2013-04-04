@@ -41,7 +41,7 @@
       }
     }
   };
-  return tddjs.namespace("util").observable = {
+  tddjs.namespace("util").observable = {
     observe: observe,
     hasObserver: hasObserver,
     notify: notify
