@@ -20,9 +20,7 @@
     }, TypeError);
   });
   return test("it should obtain an XMLHttpRequest object", function() {
-    ajax.create = function() {
-      return ajax.create.called = true;
-    };
+    ajax.create = stubFn();
     ajax.get("/url");
     return ok(ajax.create.called);
   });

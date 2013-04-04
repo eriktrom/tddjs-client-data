@@ -14,8 +14,7 @@ do ->
     , TypeError
 
   test "it should obtain an XMLHttpRequest object", ->
-    ajax.create = ->
-      ajax.create.called = true
+    ajax.create = stubFn()
 
     ajax.get("/url")
 
