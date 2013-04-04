@@ -5,3 +5,9 @@ module("Get Request");
 test("it should define get method", function() {
   return ok(typeof tddjs.ajax.get === "function");
 });
+
+test("it should throw error without url", function() {
+  return throws(function() {
+    return tddjs.ajax.get();
+  }, TypeError);
+});
