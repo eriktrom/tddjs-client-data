@@ -28,7 +28,7 @@ files = [
   // 'vendor/jasmine-sinon.js',
 
   'public/lib/*.js',
-  'public/app/*.js',
+  'public/src/*.js',
   'public/test/*.js'
 
   // to use source maps, use coffeescript compiler
