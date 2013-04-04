@@ -14,22 +14,20 @@ do ->
     , TypeError
 
   test "it should obtain an XMLHttpRequest object", ->
-    ajax.create = stubFn(open: ->)
+    openStub = stubFn(open: ->)
+    ajax.create = openStub
 
     ajax.get("/url")
 
     ok(ajax.create.called)
 
   test "it should call open with method, url, async flag", ->
-    actual = "hello"
+    openStub = stubFn()
 
-    ajax.create = stubFn(
-      open: ->
-        actual = arguments
-    )
+    ajax.create = stubFn(open: openStub)
 
     url = "/url"
     ajax.get(url)
 
-    actual = Array::slice.call(actual)
-    deepEqual(actual, ["GET", url, true])
+    # actual = Array::slice.call(actual)
+    deepEqual(openStub.args, ["GET", url, true])

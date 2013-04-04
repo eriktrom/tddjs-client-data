@@ -5,6 +5,7 @@ stubFn = function(returnValue) {
   var fn;
   fn = function() {
     fn.called = true;
+    fn.args = Array.prototype.slice.call(arguments);
     return returnValue;
   };
   fn.called = false;

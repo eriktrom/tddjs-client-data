@@ -20,23 +20,22 @@
     }, TypeError);
   });
   test("it should obtain an XMLHttpRequest object", function() {
-    ajax.create = stubFn({
+    var openStub;
+    openStub = stubFn({
       open: function() {}
     });
+    ajax.create = openStub;
     ajax.get("/url");
     return ok(ajax.create.called);
   });
   return test("it should call open with method, url, async flag", function() {
-    var actual, url;
-    actual = "hello";
+    var openStub, url;
+    openStub = stubFn();
     ajax.create = stubFn({
-      open: function() {
-        return actual = arguments;
-      }
+      open: openStub
     });
     url = "/url";
     ajax.get(url);
-    actual = Array.prototype.slice.call(actual);
-    return deepEqual(actual, ["GET", url, true]);
+    return deepEqual(openStub.args, ["GET", url, true]);
   });
 })();
