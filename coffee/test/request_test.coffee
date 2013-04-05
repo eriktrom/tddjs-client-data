@@ -1,3 +1,12 @@
+###
+- get to know the XMLHttpRequest better by creating an api that abstracts it
+  between browsers
+- introduction to the concept of stubbing
+- understand how to deal with dependencies in javascript
+- know what would have been helpful to automate, for next time
+###
+
+
 do ->
   ajax = tddjs.ajax
 
