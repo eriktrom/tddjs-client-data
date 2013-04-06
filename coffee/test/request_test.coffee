@@ -1,12 +1,3 @@
-###
-- get to know the XMLHttpRequest better by creating an api that abstracts it
-  between browsers
-- introduction to the concept of stubbing
-- understand how to deal with dependencies in javascript
-- know what would have been helpful to automate, for next time
-###
-
-
 do ->
   ajax = tddjs.ajax
 
@@ -23,8 +14,7 @@ do ->
     , TypeError
 
   test "it should obtain an XMLHttpRequest object", ->
-    openStub = stubFn(open: ->)
-    ajax.create = openStub
+    ajax.create = stubFn(open: ->)
 
     ajax.get("/url")
 
@@ -38,5 +28,4 @@ do ->
     url = "/url"
     ajax.get(url)
 
-    # actual = Array::slice.call(actual)
     deepEqual(openStub.args, ["GET", url, true])
