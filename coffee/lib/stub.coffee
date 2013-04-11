@@ -6,3 +6,8 @@ stubFn = (returnValue) ->
     returnValue
   fn.called = false
   fn
+
+
+fakeXMLHttpRequest = {
+  open: stubFn()
+}

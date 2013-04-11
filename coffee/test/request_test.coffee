@@ -2,7 +2,10 @@ do ->
   ajax = tddjs.ajax
 
   module "Get Request",
-    setup: -> @ajaxCreate = ajax.create
+    setup: ->
+      @ajaxCreate = ajax.create
+      @xhr = Object.create(fakeXMLHttpRequest)
+      ajax.create = stubFn(@xhr)
     teardown: -> ajax.create = @ajaxCreate
 
   test "it should define get method", ->
@@ -14,18 +17,12 @@ do ->
     , TypeError
 
   test "it should obtain an XMLHttpRequest object", ->
-    ajax.create = stubFn(open: ->)
-
     ajax.get("/url")
 
     ok(ajax.create.called)
 
   test "it should call open with method, url, async flag", ->
-    openStub = stubFn()
-
-    ajax.create = stubFn(open: openStub)
-
     url = "/url"
     ajax.get(url)
 
-    deepEqual(openStub.args, ["GET", url, true])
+    deepEqual(@xhr.open.args, ["GET", url, true])

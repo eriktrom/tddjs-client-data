@@ -27,7 +27,9 @@ files = [
   // 'vendor/sinon-1.6.0.js',
   // 'vendor/jasmine-sinon.js',
 
+
   'public/lib/tdd.js',
+  'public/lib/stub.js',
   'public/lib/*.js',
   'public/src/*.js',
   'public/test/*.js'

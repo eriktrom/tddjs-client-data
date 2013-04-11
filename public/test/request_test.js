@@ -5,7 +5,9 @@
   ajax = tddjs.ajax;
   module("Get Request", {
     setup: function() {
-      return this.ajaxCreate = ajax.create;
+      this.ajaxCreate = ajax.create;
+      this.xhr = Object.create(fakeXMLHttpRequest);
+      return ajax.create = stubFn(this.xhr);
     },
     teardown: function() {
       return ajax.create = this.ajaxCreate;
@@ -20,20 +22,13 @@
     }, TypeError);
   });
   test("it should obtain an XMLHttpRequest object", function() {
-    ajax.create = stubFn({
-      open: function() {}
-    });
     ajax.get("/url");
     return ok(ajax.create.called);
   });
   return test("it should call open with method, url, async flag", function() {
-    var openStub, url;
-    openStub = stubFn();
-    ajax.create = stubFn({
-      open: openStub
-    });
+    var url;
     url = "/url";
     ajax.get(url);
-    return deepEqual(openStub.args, ["GET", url, true]);
+    return deepEqual(this.xhr.open.args, ["GET", url, true]);
   });
 })();
