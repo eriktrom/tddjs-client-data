@@ -26,3 +26,8 @@ do ->
     ajax.get(url)
 
     deepEqual(@xhr.open.args, ["GET", url, true])
+
+  test "it should add onreadystatechange handler", ->
+    ajax.get("/url")
+
+    ok(typeof @xhr.onreadystatechange is "function")

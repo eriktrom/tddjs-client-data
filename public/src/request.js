@@ -13,6 +13,7 @@
     }
     transport = tddjs.ajax.create();
     transport.open("GET", url, true);
+    transport.onreadystatechange = function() {};
   };
   return ajax.get = get;
 })();
