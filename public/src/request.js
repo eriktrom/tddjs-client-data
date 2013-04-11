@@ -3,6 +3,9 @@
 (function() {
   var ajax, get;
   ajax = tddjs.namespace("ajax");
+  if (!ajax.create) {
+    return;
+  }
   get = function(url) {
     var transport;
     if (typeof url !== "string") {
