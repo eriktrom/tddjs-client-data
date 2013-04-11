@@ -17,4 +17,5 @@ stubFn = (returnValue) ->
 
 fakeXMLHttpRequest = {
   open: stubFn()
+  send: stubFn()
 }

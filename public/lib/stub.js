@@ -24,5 +24,6 @@ stubFn = function(returnValue) {
 };
 
 fakeXMLHttpRequest = {
-  open: stubFn()
+  open: stubFn(),
+  send: stubFn()
 };

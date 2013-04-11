@@ -26,13 +26,15 @@
     return ok(ajax.create.called);
   });
   test("it should call open with method, url, async flag", function() {
-    var url;
-    url = "/url";
-    ajax.get(url);
-    return deepEqual(this.xhr.open.args, ["GET", url, true]);
+    ajax.get("/url");
+    return deepEqual(this.xhr.open.args, ["GET", "/url", true]);
   });
-  return test("it should add onreadystatechange handler", function() {
+  test("it should add onreadystatechange handler", function() {
     ajax.get("/url");
     return ok(typeof this.xhr.onreadystatechange === "function");
+  });
+  return test("it should call send", function() {
+    ajax.get("/url");
+    return ok(this.xhr.send.called);
   });
 })();

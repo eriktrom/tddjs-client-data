@@ -7,6 +7,7 @@ do ->
     transport = tddjs.ajax.create()
     transport.open("GET", url, true)
     transport.onreadystatechange = ->
+    transport.send()
     return
 
   ajax.get = get

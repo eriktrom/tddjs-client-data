@@ -22,12 +22,16 @@ do ->
     ok(ajax.create.called)
 
   test "it should call open with method, url, async flag", ->
-    url = "/url"
-    ajax.get(url)
+    ajax.get("/url")
 
-    deepEqual(@xhr.open.args, ["GET", url, true])
+    deepEqual(@xhr.open.args, ["GET", "/url", true])
 
   test "it should add onreadystatechange handler", ->
     ajax.get("/url")
 
     ok(typeof @xhr.onreadystatechange is "function")
+
+  test "it should call send", ->
+    ajax.get("/url")
+
+    ok(@xhr.send.called)
