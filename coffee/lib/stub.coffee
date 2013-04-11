@@ -1,3 +1,10 @@
+unless Object.create
+  do ->
+    F = ->
+    Object.create = (object) ->
+      F:: = object
+      new F()
+
 stubFn = (returnValue) ->
   fn = ->
     fn.called = true
