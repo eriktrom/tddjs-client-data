@@ -29,7 +29,6 @@ files = [
 
 
   'public/lib/tdd.js',
-  'public/lib/stub.js',
   'public/lib/*.js',
   'public/src/*.js',
   'public/test/*.js'
