@@ -4,9 +4,8 @@ do ->
   unless ajax.create then return
 
   requestComplete = (transport, options) ->
-    if transport.status is 200
-      if typeof options.success is "function"
-        options.success(transport)
+    if transport.status is 200 && typeof options.success is "function"
+      options.success(transport)
 
   get = (url, options) ->
     if typeof url isnt "string" then throw new TypeError("URL should be string")
