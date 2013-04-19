@@ -1,7 +1,6 @@
 do ->
   ajax = tddjs.namespace("ajax")
-
-  unless ajax.create then return
+  if !ajax.create then return
 
   requestComplete = (transport, options) ->
     if transport.status is 200 && typeof options.success is "function"

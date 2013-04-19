@@ -81,8 +81,8 @@ autoWatch = true;
 // - PhantomJS
 // - IE (only Windows)
 browsers = [
-  // 'Chrome',
-  'ChromeCanary',
+  'Chrome'
+  // 'ChromeCanary',
   // 'Firefox',
   // 'Opera',
   // 'Safari', // it opens more than one tab which is annoying on start
