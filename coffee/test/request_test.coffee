@@ -77,3 +77,27 @@ do ->
 
       ok(true)
       expect 1
+    test "it should pass null as argument to send", ->
+      ajax.get("/url")
+      ok(@xhrDbl.send.args[0] is null)
+
+    test "it should reset onreadystatechange when complete", ->
+      @xhrDbl.readyState = 4
+      ajax.get("/url")
+
+      @xhrDbl.onreadystatechange()
+
+      ok(@xhrDbl.onreadystatechange is tddjs.noop)
+
+    test "should call success handler for local requests", ->
+      @xhrDbl.readyState = 4
+      @xhrDbl.status = 0
+      success = stubFn()
+      isLocalOriginal = tddjs.isLocal # save reference to original
+      tddjs.isLocal = stubFn(true)
+
+      ajax.get("file.html", {success})
+      @xhrDbl.onreadystatechange()
+
+      ok(success.called)
+      tddjs.isLocal = isLocalOriginal # restore reference to original

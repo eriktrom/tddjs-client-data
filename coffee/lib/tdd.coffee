@@ -132,13 +132,8 @@ tddjs.isHostMethod = (function () {
 
   return isHostMethod;
 }());
-
-tddjs.isLocal = (function () {
-  function isLocal() {
-    return !!(window.location &&
-           window.location.protocol.indexOf("file:") === 0);
-  }
-
-  return isLocal;
-}());
 `
+tddjs.isLocal = do ->
+  isLocal = ->
+    !!(window.location && window.location.protocol.indexOf("file:") is 0)
+  isLocal
