@@ -14,20 +14,25 @@ do ->
       opts.failure(transport) if typeof opts.failure is "function"
 
   setData = (opts) ->
-    if opts.method is "POST"
+    if opts.data
       opts.data = tddjs.util.urlParams(opts.data)
+      if opts.method is "GET"
+        opts.url += "?#{opts.data}"
+        opts.data = null
     else
       opts.data = null
+
 
   request = (url, opts) ->
     if typeof url isnt "string" then throw new TypeError("URL should be string")
 
     opts = tddjs.extend({}, opts)
+    opts.url = url
     setData(opts)
 
     transport = ajax.create()
 
-    transport.open(opts.method, url, true)
+    transport.open(opts.method || "GET", opts.url, true)
 
     transport.onreadystatechange = ->
       if transport.readyState is 4

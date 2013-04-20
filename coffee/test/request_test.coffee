@@ -132,9 +132,21 @@ do ->
       objectDbl = {field1: "13", field2: "Lots of data!"}
       expected = tddjs.util.urlParams(objectDbl) # this should be a stub/mock, its a dependency
 
-      ajax.request "/url", data: objectDbl, method: "POST"
+      ajax.request("/url", data: objectDbl, method: "POST")
 
       strictEqual(@xhrDbl.send.args[0], expected)
+
+    test "it sends data in the URL for GET", ->
+      url = "/url"
+      objectDbl = {field1: "13", field2: "Lots of data!"}
+      expected = "#{url}?#{tddjs.util.urlParams(objectDbl)}"
+
+      ajax.request(url, data: objectDbl, method: "GET")
+
+      strictEqual(@xhrDbl.open.args[1], expected)
+
+    # TODO: test url when it already has query parameters on it, as right now
+    # it will fail
 
   do ->
     module "Post Request", {setup, teardown}
