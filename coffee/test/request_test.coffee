@@ -148,6 +148,14 @@ do ->
     # TODO: test url when it already has query parameters on it, as right now
     # it will fail
 
+    test "it sends request headers for GET", ->
+      url = "/url"
+      objectDbl = {field1: "13", field2: "Lots of data!"}
+      headerDbl = {aHeader: "Accept", aHeaderValue: "bullshit"}
+      ajax.request(url, data: objectDbl, method: "GET", header: headerDbl)
+
+      strictEqual(@xhrDbl.headers["Accept"], headerDbl["aHeaderValue"])
+
   do ->
     module "Post Request", {setup, teardown}
 

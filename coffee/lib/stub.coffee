@@ -43,6 +43,11 @@ XMLHttpRequestDbl = {
   readyStateChange: (readyState) ->
     @readyState = readyState
     @onreadystatechange()
+
+  setRequestHeader: (header, value) ->
+    if !@headers
+      @headers = {}
+    @headers[header] = value
 }
 
 

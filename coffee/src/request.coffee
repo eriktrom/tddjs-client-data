@@ -39,6 +39,11 @@ do ->
         requestComplete(transport, opts)
         transport.onreadystatechange = tddjs.noop # break IE circular reference memory leak pg 272
 
+    if opts.header
+      aHeader = opts.header["aHeader"]
+      aHeaderValue = opts.header["aHeaderValue"]
+      transport.setRequestHeader(aHeader, aHeaderValue)
+
     transport.send(opts.data) # firefox < 3 will throw if send is called without arg
     return
 
