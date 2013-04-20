@@ -29,5 +29,11 @@ do ->
     opts.method = "GET"
     ajax.request(url, opts)
 
+  post = (url, opts) ->
+    opts = tddjs.extend({}, opts)
+    opts.method = "POST"
+    ajax.request(url, opts)
+
+  ajax.post = post
   ajax.get = get
   ajax.request = request

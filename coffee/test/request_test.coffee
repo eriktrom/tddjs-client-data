@@ -110,3 +110,13 @@ do ->
     test "it should call send", ->
       ajax.request("/url")
       ok(@xhrDbl.send.called)
+
+  do ->
+    module "Post Request",
+      setup: -> @ajaxRequest = ajax.request
+      teardown: -> ajax.request = @ajaxRequest
+
+    test "it should call request with POST method", ->
+      ajax.request = stubFn()
+      ajax.post("/url")
+      strictEqual(ajax.request.args[1].method, "POST")
