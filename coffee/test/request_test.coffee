@@ -3,10 +3,16 @@ do ->
   ajax = tddjs.ajax
 
   setup = ->
-    @ajaxCreate = ajax.create
+    @originalTddjsUrlParams = tddjs.util.urlParams
+    @originalAjaxRequest = ajax.request
+    @orignalAjaxCreate = ajax.create
+
     @xhrDbl = Object.create(XMLHttpRequestDbl) # why do we need Object.create? Chpt. 7?
     ajax.create = stubFn(@xhrDbl)
-  teardown = -> ajax.create = @ajaxCreate
+  teardown = ->
+    tddjs.util.urlParams = @originalTddjsUrlParams
+    ajax.request = @originalAjaxRequest
+    ajax.create = @orignalAjaxCreate
 
   do ->
     module "Get Request", {setup, teardown}
@@ -111,10 +117,19 @@ do ->
       ajax.request("/url")
       ok(@xhrDbl.send.called)
 
+    test "it encodes data", ->
+      tddjs.util.urlParams = stubFn()
+      objectDbl = {field1: "13", field2: "Lots of data!"}
+
+      ajax.request("/url", data: objectDbl, method: "POST")
+
+      strictEqual(tddjs.util.urlParams.args[0], objectDbl)
+
+    # TODO: write a feature test by removing method locally for duration of test
+    #       and assert that the method did not throw an exception, pg 284
+
   do ->
-    module "Post Request",
-      setup: -> @ajaxRequest = ajax.request
-      teardown: -> ajax.request = @ajaxRequest
+    module "Post Request", {setup, teardown}
 
     test "it should call request with POST method", ->
       ajax.request = stubFn()

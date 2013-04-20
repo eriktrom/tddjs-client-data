@@ -2,6 +2,7 @@ tddjs.noop = -> # create a clean scope chain
 
 do ->
   ajax = tddjs.namespace("ajax")
+  util = tddjs.namespace("util")
   return if !ajax.create
 
   isSuccess = (transport) ->
@@ -14,13 +15,19 @@ do ->
 
   request = (url, opts) ->
     if typeof url isnt "string" then throw new TypeError("URL should be string")
-    opts = opts || {}
+
+    opts = tddjs.extend({}, opts)
+    opts.data = tddjs.util.urlParams(opts.data)
+
     transport = ajax.create()
-    transport.open(opts.method || "GET", url, true)
+
+    transport.open(opts.method, url, true)
+
     transport.onreadystatechange = ->
       if transport.readyState is 4
         requestComplete(transport, opts)
         transport.onreadystatechange = tddjs.noop # break IE circular reference memory leak pg 272
+
     transport.send(null) # firefox < 3 will throw if send is called without arg
     return
 
@@ -50,7 +57,6 @@ do -> # simplified url parameter encoder
     return encodeURI(object) if typeof object is "string"
 
     pieces = []
-
     tddjs.each object, (prop, val) ->
       pieces.push("#{encodeURIComponent(prop)}=#{encodeURIComponent(val)}")
 
