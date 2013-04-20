@@ -89,7 +89,7 @@ do ->
 
       ok(@xhrDbl.onreadystatechange is tddjs.noop)
 
-    test "should call success handler for local requests", ->
+    test "calls success handler for local requests (instead of failing silently)", ->
       @xhrDbl.readyState = 4
       @xhrDbl.status = 0
       success = stubFn()

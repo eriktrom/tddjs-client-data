@@ -1,4 +1,4 @@
-tddjs.noop = ->
+tddjs.noop = -> # create a clean scope chain
 
 do ->
   ajax = tddjs.namespace("ajax")
@@ -17,8 +17,8 @@ do ->
     transport.onreadystatechange = ->
       if transport.readyState is 4
         requestComplete(transport, options)
-        transport.onreadystatechange = tddjs.noop
-    transport.send(null)
+        transport.onreadystatechange = tddjs.noop # break IE circular reference memory leak pg 272
+    transport.send(null) # firefox < 3 will throw if send is called without arg
     return
 
   ajax.get = get
