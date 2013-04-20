@@ -156,6 +156,9 @@ do ->
 
       deepEqual(@xhrDbl.headers[0], headersDbl[0])
 
+      # TODO: there is a considerable amount of refactoring we can do here,
+      # see page 287
+
   do ->
     module "Post Request", {setup, teardown}
 
