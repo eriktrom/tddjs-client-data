@@ -24,6 +24,15 @@ tddjs.isOwnProperty = do ->
   # this convention - any time your return ->, put return ->
   # ->
 
+tddjs.extend = do ->
+  extend = (target, source) ->
+    target = target || {}
+    return target if !source
+    tddjs.each source, (prop, val) ->
+      target[prop] = val
+    target
+  extend
+
 `
 tddjs.each = (function () {
   // Returns an array of properties that are not exposed
@@ -101,24 +110,6 @@ tddjs.each = (function () {
       }
     }
   };
-}());
-
-tddjs.extend = (function () {
-  function extend(target, source) {
-    target = target || {};
-
-    if (!source) {
-      return target;
-    }
-
-    tddjs.each(source, function (prop, val) {
-      target[prop] = val;
-    });
-
-    return target;
-  }
-
-  return extend;
 }());
 
 tddjs.isHostMethod = (function () {

@@ -24,7 +24,10 @@ do ->
     transport.send(null) # firefox < 3 will throw if send is called without arg
     return
 
-  get = (url, opts) -> request(url, opts)
+  get = (url, opts) ->
+    opts = tddjs.extend({}, opts)
+    opts.method = "GET"
+    ajax.request(url, opts)
 
   ajax.get = get
   ajax.request = request

@@ -18,26 +18,9 @@ do ->
       ok( matchers.okFunction(ajax.get) ) # hmmm.... TODO - make real matcher
       ok( typeof ajax.get is "function" ) # <-- any accuracy difference vs ^^
 
-    test "it should throw error without url", ->
-      throws ->
-        ajax.get()
-      , TypeError
-
-    test "it should obtain an XMLHttpRequest object", ->
-      ajax.get("/url")
-      ok(ajax.create.called)
-
     test "it should call open with method, url, async flag", ->
       ajax.get("/url")
       deepEqual(@xhrDbl.open.args, ["GET", "/url", true])
-
-    test "it should add onreadystatechange handler", ->
-      ajax.get("/url")
-      ok(typeof @xhrDbl.onreadystatechange is "function")
-
-    test "it should call send", ->
-      ajax.get("/url")
-      ok(@xhrDbl.send.called)
 
   do ->
     ###*
@@ -52,7 +35,7 @@ do ->
     forceStatusAndReadyState = (xhr, status, readyState) ->
       success = stubFn()
       failure = stubFn()
-      ajax.get "/url", success: success, failure: failure
+      ajax.request "/url", success: success, failure: failure
       xhr.status = status
       xhr.readyStateChange(readyState)
 
@@ -69,7 +52,7 @@ do ->
       @xhrDbl.readyState = 4
       @xhrDbl.status = 200
 
-      ajax.get("/url")
+      ajax.request("/url")
 
       # 3 ways to test for assertNoException, one js, two CS
       # 1 - this is what we want to come out
@@ -87,12 +70,12 @@ do ->
       ok(true)
       expect 1
     test "it should pass null as argument to send", ->
-      ajax.get("/url")
+      ajax.request("/url")
       ok(@xhrDbl.send.args[0] is null)
 
     test "it should reset onreadystatechange when complete", ->
       @xhrDbl.readyState = 4
-      ajax.get("/url")
+      ajax.request("/url")
 
       @xhrDbl.onreadystatechange()
 
@@ -110,3 +93,20 @@ do ->
     test "it should use specified request method", ->
       ajax.request "/uri", method: "POST"
       strictEqual(@xhrDbl.open.args[0], "POST")
+
+    test "it should throw error without url", ->
+      throws ->
+        ajax.request()
+      , TypeError
+
+    test "it should obtain an XMLHttpRequest object", ->
+      ajax.request("/url")
+      ok(ajax.create.called)
+
+    test "it should add onreadystatechange handler", ->
+      ajax.request("/url")
+      ok(typeof @xhrDbl.onreadystatechange is "function")
+
+    test "it should call send", ->
+      ajax.request("/url")
+      ok(@xhrDbl.send.called)
