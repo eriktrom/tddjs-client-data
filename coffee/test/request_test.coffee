@@ -2,13 +2,14 @@ do ->
   matchers = tddjs.namespace("util").matchers
   ajax = tddjs.ajax
 
+  setup = ->
+    @ajaxCreate = ajax.create
+    @xhrDbl = Object.create(XMLHttpRequestDbl) # why do we need Object.create? Chpt. 7?
+    ajax.create = stubFn(@xhrDbl)
+  teardown = -> ajax.create = @ajaxCreate
+
   do ->
-    module "Get Request",
-      setup: ->
-        @ajaxCreate = ajax.create
-        @xhrDbl = Object.create(XMLHttpRequestDbl)
-        ajax.create = stubFn(@xhrDbl)
-      teardown: -> ajax.create = @ajaxCreate
+    module "Get Request", {setup, teardown}
 
     test "@xhrDbl is a function", ->
       ok( matchers.okFunction(ajax.create) )
@@ -58,12 +59,7 @@ do ->
       successIsCalled: success.called
       failureIsCalled: failure.called
 
-    module "Ready State Handler",
-      setup: ->
-        @ajaxCreate = ajax.create
-        @xhrDbl = Object.create(XMLHttpRequestDbl) # why do we need Object.create? Chpt. 7?
-        ajax.create = stubFn(@xhrDbl)
-      teardown: -> ajax.create = @ajaxCreate
+    module "Ready State Handler", {setup, teardown}
 
     test "it should call success handler for status 200", 1, ->
       request = forceStatusAndReadyState(@xhrDbl, 200, 4)
@@ -107,3 +103,10 @@ do ->
       request = forceStatusAndReadyState(@xhrDbl, 0, 4)
 
       ok(request.successIsCalled)
+
+  do ->
+    module "Request", {setup, teardown}
+
+    test "it should use specified request method", ->
+      ajax.request "/uri", method: "POST"
+      strictEqual(@xhrDbl.open.args[0], "POST")
