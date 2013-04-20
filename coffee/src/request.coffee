@@ -18,6 +18,9 @@ do ->
 
     opts = tddjs.extend({}, opts)
     opts.data = tddjs.util.urlParams(opts.data)
+    data = null
+    if opts.method is "POST"
+      data = opts.data
 
     transport = ajax.create()
 
@@ -28,7 +31,7 @@ do ->
         requestComplete(transport, opts)
         transport.onreadystatechange = tddjs.noop # break IE circular reference memory leak pg 272
 
-    transport.send(null) # firefox < 3 will throw if send is called without arg
+    transport.send(data) # firefox < 3 will throw if send is called without arg
     return
 
   get = (url, opts) ->

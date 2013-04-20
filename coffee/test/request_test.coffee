@@ -128,6 +128,14 @@ do ->
     # TODO: write a feature test by removing method locally for duration of test
     #       and assert that the method did not throw an exception, pg 284
 
+    test "it sends data with send() for POST", ->
+      objectDbl = {field1: "13", field2: "Lots of data!"}
+      expected = tddjs.util.urlParams(objectDbl) # this should be a stub/mock, its a dependency
+
+      ajax.request "/url", data: objectDbl, method: "POST"
+
+      strictEqual(@xhrDbl.send.args[0], expected)
+
   do ->
     module "Post Request", {setup, teardown}
 
