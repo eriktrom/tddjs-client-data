@@ -2,7 +2,7 @@ tddjs.noop = -> # create a clean scope chain
 
 do ->
   ajax = tddjs.namespace("ajax")
-  if !ajax.create then return
+  return if !ajax.create
 
   isSuccess = (transport) ->
     transport.status is 200 || (tddjs.isLocal() && !transport.status)
