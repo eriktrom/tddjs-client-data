@@ -41,3 +41,19 @@ do ->
   ajax.post = post
   ajax.get = get
   ajax.request = request
+
+do -> # simplified url parameter encoder
+  return if typeof encodeURIComponent is "undefined"
+
+  urlParams = (object) ->
+    return "" if !object
+    return encodeURI(object) if typeof object is "string"
+
+    pieces = []
+
+    tddjs.each object, (prop, val) ->
+      pieces.push("#{encodeURIComponent(prop)}=#{encodeURIComponent(val)}")
+
+    pieces.join("&")
+
+  tddjs.namespace("util").urlParams = urlParams
