@@ -28,11 +28,15 @@ do ->
     opts = tddjs.extend({}, opts)
     opts.method = "GET"
     ajax.request(url, opts)
+    return
 
   post = (url, opts) ->
     opts = tddjs.extend({}, opts)
     opts.method = "POST"
     ajax.request(url, opts)
+    return
+    # Im thinking of putting return at the end of any methods that 'do'
+    # work instead of returning a value
 
   ajax.post = post
   ajax.get = get
