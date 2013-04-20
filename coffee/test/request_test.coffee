@@ -39,6 +39,25 @@ do ->
       ok(@xhrDbl.send.called)
 
   do ->
+    ###*
+     * A test helper to force the value of a the status and ready state
+     * @param  {Object} xhr        a fake xhr object
+     * @param  {Number} status     a fake http status code (e.g. 200)
+     * @param  {Number} readyState a fake xhr ready state (e.g. 4)
+     * @return {Object}            returns an object with properties successIsCalled
+     *                                     and failureIsCalled, used for indicating if the
+     *                                     corresponding callback was called
+    ###
+    forceStatusAndReadyState = (xhr, status, readyState) ->
+      success = stubFn()
+      failure = stubFn()
+      ajax.get "/url", success: success, failure: failure
+      xhr.status = status
+      xhr.readyStateChange(readyState)
+
+      successIsCalled: success.called
+      failureIsCalled: failure.called
+
     module "Ready State Handler",
       setup: ->
         @ajaxCreate = ajax.create
@@ -47,14 +66,8 @@ do ->
       teardown: -> ajax.create = @ajaxCreate
 
     test "it should call success handler for status 200", 1, ->
-      @xhrDbl.readyState = 4
-      @xhrDbl.status = 200
-      success = stubFn()
-
-      ajax.get("/url", {success})
-      @xhrDbl.onreadystatechange()
-
-      ok(success.called)
+      request = forceStatusAndReadyState(@xhrDbl, 200, 4)
+      ok(request.successIsCalled)
 
     test "it should not throw error without success handler", ->
       @xhrDbl.readyState = 4
@@ -90,14 +103,7 @@ do ->
       ok(@xhrDbl.onreadystatechange is tddjs.noop)
 
     test "calls success handler for local requests (instead of failing silently)", ->
-      @xhrDbl.readyState = 4
-      @xhrDbl.status = 0
-      success = stubFn()
-      isLocalOriginal = tddjs.isLocal # save reference to original
       tddjs.isLocal = stubFn(true)
+      request = forceStatusAndReadyState(@xhrDbl, 0, 4)
 
-      ajax.get("file.html", {success})
-      @xhrDbl.onreadystatechange()
-
-      ok(success.called)
-      tddjs.isLocal = isLocalOriginal # restore reference to original
+      ok(request.successIsCalled)

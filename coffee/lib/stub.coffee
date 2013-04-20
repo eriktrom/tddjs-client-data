@@ -45,24 +45,5 @@ XMLHttpRequestDbl = {
     @onreadystatechange()
 }
 
-###*
- * A test helper to force the value of a the status and ready state
- * @param  {Object} xhr        a fake xhr object
- * @param  {Number} status     a fake http status code (e.g. 200)
- * @param  {Number} readyState a fake xhr ready state (e.g. 4)
- * @return {Object}            returns an object with properties success
- *                                     and failure, used for indicating if the
- *                                     corresponding callback was called
-###
-forceStatusAndReadyState = (xhr, status, readyState) ->
-  success = stubFn()
-  failure = stubFn()
-  ajax.get "/url", success: success, failure: failure
-
-  xhr.status = status
-  xhr.readyStateChange(readyState)
-
-  success: success.called
-  failure: failure.called
 
 
