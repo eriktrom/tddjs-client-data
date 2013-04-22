@@ -3,14 +3,16 @@ do ->
   matchers = tddjs.util.matchers
 
   setup = ->
-    @orignalAjaxCreate = ajax.create
+    @originalAjaxCreate = ajax.create
+    @originalAjaxRequest = ajax.request
     @xhrDbl = Object.create(XMLHttpRequestDbl) # why do we need Object.create? Chpt. 7?
     ajax.create = stubFn(@xhrDbl)
     @poller = Object.create(ajax.poller)
     @poller.url = "/url"
     @clock = sinon.useFakeTimers()
   teardown = ->
-    ajax.create = @orignalAjaxCreate
+    ajax.create = @originalAjaxCreate
+    ajax.request = @originalAjaxRequest
     @clock.restore
 
   module "Poller", {setup, teardown}
@@ -113,6 +115,19 @@ do ->
 
   # TODO: improve poller to handle things like network issues, suggested as
   # exercise to the reader, pg 311
+
+  test '''new requests should be made immediatly if the minimum interval has
+          passed since the last request was issued''', ->
+    @poller.interval = 500
+    @poller.start()
+    ahead = new Date().getTime() + 600
+    stubDateConstructor(new Date(ahead))
+    ajax.request = stubFn()
+
+    @xhrDbl.complete()
+    @clock.tick(0) # touch the clock to fire queded timers
+
+    ok ajax.request.called
 
 do ->
   ajax = tddjs.ajax

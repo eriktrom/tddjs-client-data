@@ -26,12 +26,17 @@ do ->
     if typeof @interval is "number"
       interval = @interval
 
+    requestStart = new Date().getTime()
+
     self = @
     ajax.request @url,
       complete: ->
+        elapsed = new Date().getTime() - requestStart
+        remaining = interval - elapsed
+
         setTimeout ->
           self.start()
-        , interval
+        , Math.max(0, remaining)
         self.complete() if typeof self.complete is "function"
       headers: self.headers
       success: self.success
