@@ -33,6 +33,7 @@ do ->
           self.start()
         , interval
       headers: self.headers
+      success: self.success
 
   ajax.poller = {
     start

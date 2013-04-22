@@ -86,3 +86,11 @@ do ->
 
     strictEqual @xhrDbl.headers["Header-One"], @poller.headers["Header-One"]
     strictEqual @xhrDbl.headers["Header-Two"], @poller.headers["Header-Two"]
+
+  test "#start should pass success callback", ->
+    @poller.success = stubFn()
+
+    @poller.start()
+    @xhrDbl.complete() # simulate successful request
+
+    ok @poller.success.called
