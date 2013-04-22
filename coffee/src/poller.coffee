@@ -40,3 +40,20 @@ do ->
   ajax.poller = {
     start
   }
+
+do ->
+  ajax = tddjs.namespace("ajax")
+
+  poll = (url, opts) ->
+    poller = Object.create(ajax.poller)
+    poller.url = url
+    opts = opts || {}
+    poller.headers = opts.headers
+    poller.success = opts.success
+    poller.failure = opts.failure
+    poller.complete = opts.complete
+    poller.interval = opts.interval
+    poller.start()
+    poller
+
+  ajax.poll = poll

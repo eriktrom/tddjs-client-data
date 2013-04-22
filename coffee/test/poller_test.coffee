@@ -113,3 +113,54 @@ do ->
 
   # TODO: improve poller to handle things like network issues, suggested as
   # exercise to the reader, pg 311
+
+do ->
+  ajax = tddjs.ajax
+
+  module "Poll API",
+    setup: ->
+      @request = ajax.request
+      @create = Object.create
+      ajax.request = stubFn()
+    teardown: ->
+      ajax.request = @request
+      Object.create = @create
+
+  test "it should call start on poller object", ->
+    # an object inheriting from ajax.poller is created using Object.create
+    # and its start method is called
+    poller = {start: stubFn()}
+    Object.create = stubFn(poller)
+
+    ajax.poll("/url")
+
+    ok poller.start.called
+
+  test "it should set the url property on the poller object", ->
+    poller = ajax.poll("/url")
+    strictEqual poller.url, "/url"
+
+  test "it should set the headers on the poller", ->
+    headersDbl = {"Header-One": "1"}
+    poller = ajax.poll("/url", {headers: headersDbl})
+    strictEqual poller.headers, headersDbl
+
+  test "it sets the success callback on the poller", ->
+    successDbl = stubFn()
+    poller = ajax.poll("/url", {success: successDbl})
+    strictEqual poller.success, successDbl
+
+  test "it sets the failure callback on the poller", ->
+    failureDbl = stubFn()
+    poller = ajax.poll("/url", {failure: failureDbl})
+    strictEqual poller.failure, failureDbl
+
+  test "it sets the complete callback on the poller", ->
+    completeDbl = 200
+    poller = ajax.poll("/url", {complete: completeDbl})
+    strictEqual poller.complete, completeDbl
+
+  test "it sets the interval on the poller", ->
+    intervalDbl = 200
+    poller = ajax.poll("/url", {interval: intervalDbl})
+    strictEqual poller.interval, intervalDbl
