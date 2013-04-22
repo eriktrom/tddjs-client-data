@@ -4,7 +4,7 @@ do ->
   start = ->
     unless @url then throw new TypeError("Must specify URL to poll")
 
-    poller = @
+    # poller = @
 
     # ajax.request @url,
       # complete: ->
