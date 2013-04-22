@@ -6,6 +6,16 @@
 # even without setInterval. To understand this, we'll need to understand how
 # to test timers.
 
+# sheduling a new request
+# In order to test that the poller schedules new requests we need to:
+# 1. Create a poller with a URL
+# 2. Start the poller
+# 3. Simulate the first request completing
+# 4. Stub the send method over AGAIN
+# 5. Fast forward time the desired amount of milliseconds
+# 6. Assert that the send method is called a second time (it should be called
+# while the clock passed time)
+
 do ->
   ajax = tddjs.namespace("ajax")
 
