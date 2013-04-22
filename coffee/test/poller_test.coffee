@@ -76,3 +76,13 @@ do ->
 
     @clock.tick(1)
     ok @xhrDbl.send.called
+
+  test "#start should pass headers to request", ->
+    @poller.headers =
+      "Header-One": "1"
+      "Header-Two": "2"
+
+    @poller.start()
+
+    strictEqual @xhrDbl.headers["Header-One"], @poller.headers["Header-One"]
+    strictEqual @xhrDbl.headers["Header-Two"], @poller.headers["Header-Two"]

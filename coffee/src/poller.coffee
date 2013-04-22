@@ -32,6 +32,7 @@ do ->
         setTimeout ->
           self.start()
         , interval
+      headers: self.headers
 
   ajax.poller = {
     start
