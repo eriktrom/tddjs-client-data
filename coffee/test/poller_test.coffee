@@ -77,11 +77,24 @@ do ->
 
 do ->
   # Stubbing timers, pg 303
+  # jsUnitMockTimeout provides a Clock object and overrides the native
+  # setTimeout, setInterval, clearTimeout, clearInterval functions.
+  #
+  # When Clock.tick(ms) is called, any function scheduled to run sometime
+  # within the next ms number of milliseconds will be called. This allows the
+  # test to effectively fast-forward time and verify that certain functions
+  # were called when scheduled to
+  #
+  # Contrast this to using a normal stub - where we would stub the timer, do
+  # some work and then assert that the stub was used as expected. Stubbing yields
+  # shorter tests, but using the clock yields more communicative tests. Take note
+  # as we get a feel for the differences between the two approaches.
+
   # module "Stubbing setTimeout",
   #   setup: -> @setTimeout = window.setTimeout
   #   teardown: -> window.setTimeout = @setTimeout
 
-  # test "timer example", 0, ->
+  # test "timer example", ->
   #   window.setTimeout = stubFn()
   #   ok window.setTimeout.called
 
