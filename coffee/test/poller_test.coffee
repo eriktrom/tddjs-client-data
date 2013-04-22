@@ -59,7 +59,7 @@ do ->
   # Instead of defining identical success and failure callbacks, let's add a
   # a complete callback to tddjs.ajax.request. It will be called when a request
   # is complete, regardless of success. To do this, we'll need to update the
-  # requestWithReadyStateAndStatus helper, and add 3 tests asserting that the
+  # forceWithReadyStateAndStatus helper, and add 3 tests asserting that the
   # complete callback is called for successful, failed and local requests
 
 

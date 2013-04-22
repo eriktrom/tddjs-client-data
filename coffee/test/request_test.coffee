@@ -1,8 +1,6 @@
-
-
 do ->
-  matchers = tddjs.namespace("util").matchers
   ajax = tddjs.ajax
+  matchers = tddjs.namespace("util").matchers
   testHelpers = tddjs.namespace("util").testHelpers
 
   setup = ->

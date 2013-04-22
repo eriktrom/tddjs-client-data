@@ -71,6 +71,7 @@ do ->
     complete = stubFn()
 
     ajax.request("/url", {success, failure, complete})
+
     xhr.complete(status, readyState)
 
     successHasBeenCalled: success.called
