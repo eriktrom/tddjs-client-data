@@ -1,38 +1,4 @@
-do ->
-  ajax = tddjs.ajax
-  ###*
-   * A test helper to force the value of a the status and ready state
-   * @param  {Object} xhr        a fake xhr object
-   * @param  {Number} status     a fake http status code (e.g. 200)
-   * @param  {Number} readyState a fake xhr ready state (e.g. 4)
-   * @return {Object}            returns an object with properties successIsCalled
-   *                                     and failureIsCalled, used for indicating if the
-   *                                     corresponding callback was called.
-   *                                     completeIsCalled is also a property of
-   *                                     this returned object - added in chpt 13
-   *                                     it is called when a request is complete,
-   *                                     regardless of success
-   *
-   *  The reason for the complete callback is for polling. Issuing new requests
-   *  without knowing whether or not previous requests completed could lead
-   *  to multiple simultaneious connections. A better solution is to trigger
-   *  a delayed request once the previous one finishes.
-  ###
-  forceStatusAndReadyState = (xhr, status, readyState) ->
-    success = stubFn()
-    failure = stubFn()
-    complete = stubFn()
 
-    ajax.request("/url", {success, failure, complete})
-    xhr.complete(status, readyState)
-
-    successHasBeenCalled: success.called
-    failureHasBeenCalled: failure.called
-    completeHasBeenCalled: complete.called
-
-  tddjs.namespace("util").testHelpers = {
-    forceStatusAndReadyState
-  }
 
 do ->
   matchers = tddjs.namespace("util").matchers

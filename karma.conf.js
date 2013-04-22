@@ -31,6 +31,7 @@ files = [
   'public/lib/tdd.js',
   'public/lib/*.js',
   'public/src/*.js',
+  'public/test/test_helpers.js',
   'public/test/*.js'
 
   // to use source maps, use coffeescript compiler
