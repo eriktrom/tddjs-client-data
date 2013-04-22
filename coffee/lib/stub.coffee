@@ -48,6 +48,10 @@ XMLHttpRequestDbl = {
     if !@headers
       @headers = {}
     @headers[header] = value
+
+  complete: ->
+    @status = 200
+    @readyStateChange(4)
 }
 
 

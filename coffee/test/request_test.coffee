@@ -36,23 +36,48 @@ do ->
      * @param  {Number} readyState a fake xhr ready state (e.g. 4)
      * @return {Object}            returns an object with properties successIsCalled
      *                                     and failureIsCalled, used for indicating if the
-     *                                     corresponding callback was called
+     *                                     corresponding callback was called.
+     *                                     completeIsCalled is also a property of
+     *                                     this returned object - added in chpt 13
+     *                                     it is called when a request is complete,
+     *                                     regardless of success
+     *
+     *  The reason for the complete callback is for polling. Issuing new requests
+     *  without knowing whether or not previous requests completed could lead
+     *  to multiple simultaneious connections. A better solution is to trigger
+     *  a delayed request once the previous one finishes.
     ###
     forceStatusAndReadyState = (xhr, status, readyState) ->
       success = stubFn()
       failure = stubFn()
-      ajax.request "/url", success: success, failure: failure
-      xhr.status = status
-      xhr.readyStateChange(readyState)
+      complete = stubFn()
 
-      successIsCalled: success.called
-      failureIsCalled: failure.called
+      ajax.request("/url", {success, failure, complete})
+      xhr.complete(status, readyState)
+
+      successHasBeenCalled: success.called
+      failureHasBeenCalled: failure.called
+      completeHasBeenCalled: complete.called
 
     module "Ready State Handler", {setup, teardown}
 
+    test "should call complete handler for status 200", ->
+      request = forceStatusAndReadyState(@xhrDbl, 200, 4)
+      ok request.completeHasBeenCalled
+      # NOTE: these tests are not all well phrased. Who should call complete?
+      # what is the system under test here, or at any point? It's really not that
+      # clear. Fix this for myself and for the world of js. @xhrDbl should call complete
+    test "xhr object shoud call complete handler for status 400", ->
+      request = forceStatusAndReadyState(@xhrDbl, 400, 4)
+      ok request.completeHasBeenCalled
+
+    test "should call complete handler for status 0", ->
+      request = forceStatusAndReadyState(@xhrDbl, 0 , 4)
+      ok request.completeHasBeenCalled
+
     test "it should call success handler for status 200", 1, ->
       request = forceStatusAndReadyState(@xhrDbl, 200, 4)
-      ok(request.successIsCalled)
+      ok request.successHasBeenCalled
 
     test "it should not throw error without success handler", ->
       @xhrDbl.readyState = 4
@@ -91,7 +116,7 @@ do ->
       tddjs.isLocal = stubFn(true)
       request = forceStatusAndReadyState(@xhrDbl, 0, 4)
 
-      ok(request.successIsCalled)
+      ok(request.successHasBeenCalled)
 
   do ->
     module "Request", {setup, teardown}
@@ -163,3 +188,85 @@ do ->
       ajax.request = stubFn()
       ajax.post("/url")
       strictEqual(ajax.request.args[1].method, "POST")
+
+  do ->
+    module "Request Headers",
+      setup: ->
+        setup.call(@)
+        @opts =
+          method: "POST",
+          data: {field: "value"}
+      teardown: -> teardown
+
+    test "should use default Content-Type header for POST", ->
+      ajax.request("/url", @opts)
+      name = "Content-Type"
+      type = "application/x-www-form-urlencoded"
+
+      strictEqual @xhrDbl.headers[name], type
+
+    test "should use default Content-Length header for POST", ->
+      ajax.request("/url", @opts)
+      name = "Content-Length"
+      length = 11
+
+      strictEqual(@xhrDbl.headers[name], length)
+    test "should set X-Requested-With", ->
+      ajax.request("/url", @opts)
+      name = "X-Requested-With"
+      requestedWith = "XMLHttpRequest"
+
+      strictEqual(@xhrDbl.headers[name], requestedWith)
+    # test "should not override provided Content-Type", ->
+    #   ajax.request "/url", method: "POST", data: {field: "value"}
+
+    #   headers: {"Content-Type": "application/json"}
+
+    #   name = "Content-Type"
+    #   type = "application/json"
+    #   strictEqual @xhrDbl.headers[name], type
+    test "should not override provided Content-Length", ->
+      ajax.request("/url", {
+        method: "POST",
+        data: {
+          field: "value"
+        },
+        headers: {
+          "Content-Length": 47
+        }
+      })
+
+      name = "Content-Length"
+      length = 47
+
+      strictEqual(this.xhrDbl.headers[name], length)
+    test "should not override provided X-RequestedWith", ->
+      ajax.request("/url", {
+        method: "POST",
+        data: {
+          field: "value"
+        },
+        headers: {
+          "X-Requested-With": "JavaScript"
+        }
+      })
+
+      name = "X-Requested-With";
+      requestedWith = "JavaScript";
+
+      strictEqual(this.xhrDbl.headers[name], requestedWith)
+    test "should set arbitrary headers", ->
+      ajax.request("/url", {
+        method: "POST",
+        data: {
+          field: "value"
+        },
+        headers: {
+          "Accept": "*/*"
+        }
+      })
+
+      name = "Accept"
+      accept = "*/*"
+
+      strictEqual(this.xhrDbl.headers[name], accept)

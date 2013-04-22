@@ -6,22 +6,48 @@ do ->
   return if !ajax.create
 
   isSuccess = (transport) ->
-    transport.status is 200 || (tddjs.isLocal() && !transport.status)
+    status = transport.status
 
-  requestComplete = (transport, opts) ->
+    (status >= 200 && status < 300) ||
+    status is 304 ||
+    (tddjs.isLocal() && !status)
+
+  requestComplete = (opts) ->
+    transport = opts.transport
     if isSuccess(transport)
       opts.success(transport) if typeof opts.success is "function"
       opts.failure(transport) if typeof opts.failure is "function"
+      opts.complete(transport) if typeof opts.complete is "function"
 
   setData = (opts) ->
     if opts.data
       opts.data = tddjs.util.urlParams(opts.data)
       if opts.method is "GET"
-        opts.url += "?#{opts.data}"
+        hasParams = opts.url.indexOf("?") >= 0
+        opts.url += if hasParams then "&" else "?"
+        opts.url += opts.data
         opts.data = null
     else
       opts.data = null
 
+  defaultHeader = (transport, headers, header, val) ->
+    if !headers[header] then transport.setRequestHeader(header, val)
+
+  setHeaders = (opts) ->
+    headers = opts.headers || {}
+    transport = opts.transport
+
+    tddjs.each headers, (header, value) ->
+      transport.setRequestHeader(header, value)
+
+    if opts.method is "POST" && opts.data
+      defaultHeader(transport, headers,
+                    "Content-Type", "application/x-www-form-urlencoded")
+      defaultHeader(transport, headers,
+                    "Content-Length", opts.data.length)
+
+    defaultHeader(transport, headers,
+                  "X-Requested-With", "XMLHttpRequest")
 
   request = (url, opts) ->
     if typeof url isnt "string" then throw new TypeError("URL should be string")
@@ -31,17 +57,14 @@ do ->
     setData(opts)
 
     transport = ajax.create()
-
+    opts.transport = transport
     transport.open(opts.method || "GET", opts.url, true)
+    setHeaders(opts)
 
     transport.onreadystatechange = ->
       if transport.readyState is 4
-        requestComplete(transport, opts)
+        requestComplete(opts)
         transport.onreadystatechange = tddjs.noop # break IE circular reference memory leak pg 272
-
-    headers = opts.headers || {}
-    tddjs.each headers, (header, value) ->
-      transport.setRequestHeader(header, value)
 
     transport.send(opts.data) # firefox < 3 will throw if send is called without arg
     return
