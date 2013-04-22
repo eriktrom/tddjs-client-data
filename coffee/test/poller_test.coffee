@@ -37,24 +37,18 @@ do ->
 
     poller.start()
 
-    ok(@xhrDbl.open.called)
-    strictEqual(@xhrDbl.open.args[1], poller.url)
+    ok @xhrDbl.open.called
+    deepEqual(@xhrDbl.open.args, ["GET", poller.url, true])
 
-  # # knowing that the open method was called on transport doesn't necessarily
-  # # mean that the request was sent. Let's check that as well
-  # test "sends XHR request to URL", ->
-  #   poller = Object.create(ajax.poller)
-  #   poller.url = "/url"
+  # knowing that the open method was called on transport doesn't necessarily
+  # mean that the request was sent. Let's check that send was called as well
+  test "it sends an XHR request to a URL", ->
+    poller = Object.create(ajax.poller)
+    poller.url = "/url"
 
-  #   poller.start()
+    poller.start()
 
-  #   expectedArgs = ["GET", poller.url, true]
-  #   # actualArgs = [].slice.call(@xhrDbl.open.args)
-  #   actualArgs = @xhrDbl.open.args # I already applied the above in my source code
-
-  #   ok @xhrDbl.open.called
-  #   deepEqual(actualArgs, expectedArgs)
-  #   ok @xhrDbl.send.called
+    ok @xhrDbl.send.called
 
 #   test "should schedule new request when complete", ->
 #     poller = Object.create(ajax.poller)
