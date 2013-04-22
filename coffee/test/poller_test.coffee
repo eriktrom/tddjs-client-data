@@ -50,32 +50,33 @@ do ->
 
     ok @xhrDbl.send.called
 
-  # How will we issue requests periodically? A simple solution would be to make
-  # the request through setInterval. But, this may cause problems. Issuing new
-  # requests without knowing whether the previous request completed could lead
-  # to multiple simultaneous connections(bad). To fix this, we would need to wrap
-  # the success and failure callbacks
+
+  # Note regarding second stub in following test:
+  # ajax.request used by the poller creates a new XMLHttpRequest object on
+  # each request, so how can we expect that simply redefining the send method
+  # on the fake instance will work?
   #
-  # Instead of defining identical success and failure callbacks, let's add a
-  # a complete callback to tddjs.ajax.request. It will be called when a request
-  # is complete, regardless of success. To do this, we'll need to update the
-  # forceWithReadyStateAndStatus helper, and add 3 tests asserting that the
-  # complete callback is called for successful, failed and local requests
+  # The trick is that the ajax.create stub will be called once for each request
+  # but it always returns the same instance within a single test
+  #
+  # In order for this test to succeed, the poller needs to fire a new request
+  # asynchronously after the original request finished
+  test "should schedule new request when complete", ->
+    @clock = sinon.useFakeTimers()
 
+    poller = Object.create(ajax.poller)
+    poller.url = "/url"
 
-#   test "should schedule new request when complete", ->
-#     poller = Object.create(ajax.poller)
-#     poller.url = "/url"
+    poller.start()
+    @xhrDbl.complete()
+    @xhrDbl.send = stubFn() # see note above test
+    @clock.tick(1000)
+     
+    ok @xhrDbl.send.called
 
-#     poller.start()
-#     @xhrDbl.complete()
-#     @xhrDbl.send = stubFn()
-#     Clock.tick(1000)
-#      
-#     ok @xhrDbl.send.called
+    @clock.restore
 
-
-do ->
+# do ->
   # Stubbing timers, pg 303
   # jsUnitMockTimeout provides a Clock object and overrides the native
   # setTimeout, setInterval, clearTimeout, clearInterval functions.

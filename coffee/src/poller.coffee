@@ -21,7 +21,14 @@ do ->
 
   start = ->
     unless @url then throw new TypeError("Must specify URL to poll")
-    ajax.request @url
+
+    poller = @
+
+    ajax.request @url,
+      complete: ->
+        setTimeout ->
+          poller.start()
+        , 1000
 
   ajax.poller = {
     start
