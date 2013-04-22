@@ -21,9 +21,7 @@ do ->
   test "it should define a start method", ->
     ok matchers.okFunction(ajax.poller.start)
 
-  module "Poller#start", {setup, teardown}
-
-  test "it throws an exception when called without a URL", ->
+  test "#start throws an exception when called without a URL", ->
     @poller.url = null
     raises ->
       @poller.start()
@@ -35,7 +33,7 @@ do ->
   # depend on ajax.request, we can just stub that here. Yes, this makes the test
   # a bit more like an integration test, however, it still fulfills the role of
   # dependency injection, pg 298,299(326 in preview)
-  test "it opens an XHR request to a URL", ->
+  test "#start opens an XHR request to a URL", ->
     @poller.start()
 
     ok @xhrDbl.open.called
@@ -43,7 +41,7 @@ do ->
 
   # knowing that the open method was called on transport doesn't necessarily
   # mean that the request was sent. Let's check that send was called as well
-  test "it sends an XHR request to a URL", ->
+  test "#start sends an XHR request to a URL", ->
     @poller.start()
     ok @xhrDbl.send.called
 
@@ -58,7 +56,7 @@ do ->
   #
   # In order for this test to succeed, the poller needs to fire a new request
   # asynchronously after the original request finished
-  test "should schedule new request when complete", ->
+  test "#start schedules a new request when complete", ->
     @poller.start()
     @xhrDbl.complete()
     @xhrDbl.send = stubFn() # see note above test
