@@ -27,17 +27,31 @@ XMLHttpRequestDbl = {
     @readyStateChange(4)
 }
 
+# fake the Date constructor
+# accepts a sinle date object and overrides the date constructor
+# when the constructor is used, the fake object is returned and the native
+# constructor is restored
+
+do (global = @) ->
+  NativeDate = global.Date
+
+  global.stubDateConstructor = (fakeDate) ->
+    global.Date = ->
+      global.Date = NativeDate
+      fakeDate
+
 do ->
+  # TODO: add nice failure messages
+  # TODO: hook in with qunit's assertion library for seamless support
   okNumber = (actual) ->
     !isNaN(parseFloat(actual)) &&
-    !(Object.prototype.toString.call(actual) is "[object Number]")
+    (Object.prototype.toString.call(actual) is "[object Number]")
 
   okFunction = (actual) ->
     Object::toString.call(actual) is "[object Function]" # pg. 191 js-definitive-guide
 
   okObject = (actual) ->
     Object::toString.call(actual) is "[object Object]"
-
 
   tddjs.namespace("util").matchers = {
     okNumber
