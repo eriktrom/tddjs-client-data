@@ -1,6 +1,43 @@
 do ->
+  ajax = tddjs.ajax
+  ###*
+   * A test helper to force the value of a the status and ready state
+   * @param  {Object} xhr        a fake xhr object
+   * @param  {Number} status     a fake http status code (e.g. 200)
+   * @param  {Number} readyState a fake xhr ready state (e.g. 4)
+   * @return {Object}            returns an object with properties successIsCalled
+   *                                     and failureIsCalled, used for indicating if the
+   *                                     corresponding callback was called.
+   *                                     completeIsCalled is also a property of
+   *                                     this returned object - added in chpt 13
+   *                                     it is called when a request is complete,
+   *                                     regardless of success
+   *
+   *  The reason for the complete callback is for polling. Issuing new requests
+   *  without knowing whether or not previous requests completed could lead
+   *  to multiple simultaneious connections. A better solution is to trigger
+   *  a delayed request once the previous one finishes.
+  ###
+  forceStatusAndReadyState = (xhr, status, readyState) ->
+    success = stubFn()
+    failure = stubFn()
+    complete = stubFn()
+
+    ajax.request("/url", {success, failure, complete})
+    xhr.complete(status, readyState)
+
+    successHasBeenCalled: success.called
+    failureHasBeenCalled: failure.called
+    completeHasBeenCalled: complete.called
+
+  tddjs.namespace("util").testHelpers = {
+    forceStatusAndReadyState
+  }
+
+do ->
   matchers = tddjs.namespace("util").matchers
   ajax = tddjs.ajax
+  testHelpers = tddjs.namespace("util").testHelpers
 
   setup = ->
     @originalTddjsUrlParams = tddjs.util.urlParams
@@ -29,54 +66,24 @@ do ->
       deepEqual(@xhrDbl.open.args, ["GET", "/url", true])
 
   do ->
-    ###*
-     * A test helper to force the value of a the status and ready state
-     * @param  {Object} xhr        a fake xhr object
-     * @param  {Number} status     a fake http status code (e.g. 200)
-     * @param  {Number} readyState a fake xhr ready state (e.g. 4)
-     * @return {Object}            returns an object with properties successIsCalled
-     *                                     and failureIsCalled, used for indicating if the
-     *                                     corresponding callback was called.
-     *                                     completeIsCalled is also a property of
-     *                                     this returned object - added in chpt 13
-     *                                     it is called when a request is complete,
-     *                                     regardless of success
-     *
-     *  The reason for the complete callback is for polling. Issuing new requests
-     *  without knowing whether or not previous requests completed could lead
-     *  to multiple simultaneious connections. A better solution is to trigger
-     *  a delayed request once the previous one finishes.
-    ###
-    forceStatusAndReadyState = (xhr, status, readyState) ->
-      success = stubFn()
-      failure = stubFn()
-      complete = stubFn()
-
-      ajax.request("/url", {success, failure, complete})
-      xhr.complete(status, readyState)
-
-      successHasBeenCalled: success.called
-      failureHasBeenCalled: failure.called
-      completeHasBeenCalled: complete.called
-
     module "Ready State Handler", {setup, teardown}
 
     test "should call complete handler for status 200", ->
-      request = forceStatusAndReadyState(@xhrDbl, 200, 4)
+      request = testHelpers.forceStatusAndReadyState(@xhrDbl, 200, 4)
       ok request.completeHasBeenCalled
       # NOTE: these tests are not all well phrased. Who should call complete?
       # what is the system under test here, or at any point? It's really not that
       # clear. Fix this for myself and for the world of js. @xhrDbl should call complete
     test "xhr object shoud call complete handler for status 400", ->
-      request = forceStatusAndReadyState(@xhrDbl, 400, 4)
+      request = testHelpers.forceStatusAndReadyState(@xhrDbl, 400, 4)
       ok request.completeHasBeenCalled
 
     test "should call complete handler for status 0", ->
-      request = forceStatusAndReadyState(@xhrDbl, 0 , 4)
+      request = testHelpers.forceStatusAndReadyState(@xhrDbl, 0 , 4)
       ok request.completeHasBeenCalled
 
     test "it should call success handler for status 200", 1, ->
-      request = forceStatusAndReadyState(@xhrDbl, 200, 4)
+      request = testHelpers.forceStatusAndReadyState(@xhrDbl, 200, 4)
       ok request.successHasBeenCalled
 
     test "it should not throw error without success handler", ->
@@ -114,7 +121,7 @@ do ->
 
     test "calls success handler for local requests (instead of failing silently)", ->
       tddjs.isLocal = stubFn(true)
-      request = forceStatusAndReadyState(@xhrDbl, 0, 4)
+      request = testHelpers.forceStatusAndReadyState(@xhrDbl, 0, 4)
 
       ok(request.successHasBeenCalled)
 
