@@ -75,6 +75,7 @@ do ->
     ok @xhrDbl.send.called
 
     @clock.restore
+    # TODO: put this in teardown or call it in try/catch/ensure
 
 # do ->
   # Stubbing timers, pg 303
