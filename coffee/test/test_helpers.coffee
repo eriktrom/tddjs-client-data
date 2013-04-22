@@ -21,8 +21,9 @@ XMLHttpRequestDbl = {
       @headers = {}
     @headers[header] = value
 
-  complete: ->
-    @status = 200
+  complete: (status) ->
+    # FIXME: this is broken, its not testing anything really
+    @status = status || 200
     @readyStateChange(4)
 }
 
