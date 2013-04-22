@@ -102,3 +102,14 @@ do ->
     @xhrDbl.complete(400)
 
     ok @poller.failure.called
+
+  test "complete callback can be used by clients as well", ->
+    @poller.complete = stubFn()
+
+    @poller.start()
+    @xhrDbl.complete()
+
+    ok @poller.complete.called
+
+  # TODO: improve poller to handle things like network issues, suggested as
+  # exercise to the reader, pg 311

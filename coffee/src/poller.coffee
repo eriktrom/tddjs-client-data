@@ -32,6 +32,7 @@ do ->
         setTimeout ->
           self.start()
         , interval
+        self.complete() if typeof self.complete is "function"
       headers: self.headers
       success: self.success
       failure: self.failure
