@@ -64,3 +64,15 @@ do ->
      
     ok @xhrDbl.send.called
 
+  test "#start configures exact request interval(no less, no more)", ->
+    # rare case where we assert, do more stuff, then assert again
+    @poller.interval = 350
+    @poller.start()
+    @xhrDbl.complete()
+    @xhrDbl.send = stubFn()
+
+    @clock.tick(349)
+    ok !(@xhrDbl.send.called)
+
+    @clock.tick(1)
+    ok @xhrDbl.send.called

@@ -22,13 +22,16 @@ do ->
   start = ->
     unless @url then throw new TypeError("Must specify URL to poll")
 
-    poller = @
+    interval = 1000
+    if typeof @interval is "number"
+      interval = @interval
 
+    self = @
     ajax.request @url,
       complete: ->
         setTimeout ->
-          poller.start()
-        , 1000
+          self.start()
+        , interval
 
   ajax.poller = {
     start
