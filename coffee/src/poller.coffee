@@ -34,6 +34,7 @@ do ->
         , interval
       headers: self.headers
       success: self.success
+      failure: self.failure
 
   ajax.poller = {
     start

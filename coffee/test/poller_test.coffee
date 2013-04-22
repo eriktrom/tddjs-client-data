@@ -94,3 +94,11 @@ do ->
     @xhrDbl.complete() # simulate successful request
 
     ok @poller.success.called
+
+  test "#start should pass failure callback", ->
+    @poller.failure = stubFn()
+
+    @poller.start()
+    @xhrDbl.complete(400)
+
+    ok @poller.failure.called

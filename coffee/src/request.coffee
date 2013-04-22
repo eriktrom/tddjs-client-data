@@ -7,17 +7,26 @@ do ->
 
   isSuccess = (transport) ->
     status = transport.status
+    result =
+      (status >= 200 && status < 300) ||
+      status is 304 ||
+      (tddjs.isLocal() && !status)
+    result
 
-    (status >= 200 && status < 300) ||
-    status is 304 ||
-    (tddjs.isLocal() && !status)
+  isFailure = (transport) ->
+    status = transport.status
+    result =
+      status is 400
+    result
 
   requestComplete = (opts) ->
     transport = opts.transport
     if isSuccess(transport)
       opts.success(transport) if typeof opts.success is "function"
+    if isFailure(transport)
       opts.failure(transport) if typeof opts.failure is "function"
-      opts.complete(transport) if typeof opts.complete is "function"
+
+    opts.complete(transport) if typeof opts.complete is "function"
 
   setData = (opts) ->
     if opts.data

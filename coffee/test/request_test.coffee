@@ -40,9 +40,9 @@ do ->
       # clear. Fix this for myself and for the world of js. @xhrDbl should call complete
 
     # FIXME: this broke(or never worked when I passed status to complete callback)
-    # test "xhr object shoud call complete handler for status 400", ->
-    #   request = testHelpers.forceStatusAndReadyState(@xhrDbl, 400, 4)
-    #   ok request.completeHasBeenCalled
+    test "xhr object shoud call complete handler for status 400", ->
+      request = testHelpers.forceStatusAndReadyState(@xhrDbl, 400, 4)
+      ok request.completeHasBeenCalled
 
     test "should call complete handler for status 0", ->
       request = testHelpers.forceStatusAndReadyState(@xhrDbl, 0 , 4)
@@ -189,57 +189,43 @@ do ->
       name = "X-Requested-With"
       requestedWith = "XMLHttpRequest"
 
-      strictEqual(@xhrDbl.headers[name], requestedWith)
-    # test "should not override provided Content-Type", ->
-    #   ajax.request "/url", method: "POST", data: {field: "value"}
+      strictEqual @xhrDbl.headers[name], requestedWith
+    test "should not override provided Content-Type", ->
+      ajax.request "/url",
+        method: "GET",
+        data: {field: "value"}
+        headers: {"Content-Type": "application/json"}
 
-    #   headers: {"Content-Type": "application/json"}
-
-    #   name = "Content-Type"
-    #   type = "application/json"
-    #   strictEqual @xhrDbl.headers[name], type
+      name = "Content-Type"
+      type = "application/json"
+      strictEqual @xhrDbl.headers[name], type
     test "should not override provided Content-Length", ->
-      ajax.request("/url", {
+      ajax.request "/url",
         method: "POST",
-        data: {
-          field: "value"
-        },
-        headers: {
-          "Content-Length": 47
-        }
-      })
+        data: {field: "value"},
+        headers: {"Content-Length": 47}
 
       name = "Content-Length"
       length = 47
 
-      strictEqual(this.xhrDbl.headers[name], length)
+      strictEqual @xhrDbl.headers[name], length
     test "should not override provided X-RequestedWith", ->
-      ajax.request("/url", {
+      ajax.request "/url",
         method: "POST",
-        data: {
-          field: "value"
-        },
-        headers: {
-          "X-Requested-With": "JavaScript"
-        }
-      })
+        data: {field: "value"},
+        headers: {"X-Requested-With": "JavaScript"}
 
-      name = "X-Requested-With";
-      requestedWith = "JavaScript";
+      name = "X-Requested-With"
+      requestedWith = "JavaScript"
 
-      strictEqual(this.xhrDbl.headers[name], requestedWith)
+      strictEqual @xhrDbl.headers[name], requestedWith
     test "should set arbitrary headers", ->
-      ajax.request("/url", {
+      ajax.request "/url",
         method: "POST",
-        data: {
-          field: "value"
-        },
-        headers: {
-          "Accept": "*/*"
-        }
-      })
+        data: {field: "value"},
+        headers: {"Accept": "*/*"}
 
       name = "Accept"
       accept = "*/*"
 
-      strictEqual(this.xhrDbl.headers[name], accept)
+      strictEqual @xhrDbl.headers[name], accept
