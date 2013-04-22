@@ -50,6 +50,19 @@ do ->
 
     ok @xhrDbl.send.called
 
+  # How will we issue requests periodically? A simple solution would be to make
+  # the request through setInterval. But, this may cause problems. Issuing new
+  # requests without knowing whether the previous request completed could lead
+  # to multiple simultaneous connections(bad). To fix this, we would need to wrap
+  # the success and failure callbacks
+  #
+  # Instead of defining identical success and failure callbacks, let's add a
+  # a complete callback to tddjs.ajax.request. It will be called when a request
+  # is complete, regardless of success. To do this, we'll need to update the
+  # requestWithReadyStateAndStatus helper, and add 3 tests asserting that the
+  # complete callback is called for successful, failed and local requests
+
+
 #   test "should schedule new request when complete", ->
 #     poller = Object.create(ajax.poller)
 #     poller.url = "/url"
