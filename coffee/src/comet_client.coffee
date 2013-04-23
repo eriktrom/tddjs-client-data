@@ -1,4 +1,8 @@
 do ->
   ajax = tddjs.namespace("ajax")
 
-  ajax.cometClient = {}
+  dispatch = ->
+
+  ajax.cometClient = {
+    dispatch
+  }
