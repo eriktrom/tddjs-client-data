@@ -11,6 +11,9 @@ do ->
         observers.notify(topic, event)
       return
 
+  # observe = ->
+
   ajax.cometClient = {
     dispatch
+    # observe
   }
