@@ -13,16 +13,14 @@ do ->
       return
 
   observe = (topic, observer) ->
-    if !@observers
-      @observers = Object.create(util.observable)
-
+    @observers ||= Object.create(util.observable)
     @observers.observe(topic, observer)
 
   connect = ->
     unless @url then throw new TypeError("cometClient url is null")
-    unless @poller # prevent more than one polling
-      @poller = ajax.poll(@url)
-
+    @poller ||= ajax.poll @url,
+      success: (xhr) =>
+        @dispatch(JSON.parse(xhr.responseText))
 
   ajax.cometClient = {
     dispatch

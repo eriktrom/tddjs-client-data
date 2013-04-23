@@ -91,11 +91,15 @@ do ->
   ajax = tddjs.ajax
   module "cometClient#connect",
     setup: ->
-      @client = @observable = Object.create(ajax.cometClient)
       @ajaxPoll = ajax.poll
+      @ajaxCreate = ajax.create
+      @client = @observable = Object.create(ajax.cometClient)
+      @xhrDbl = Object.create(XMLHttpRequestDbl)
+      ajax.create = stubFn(@xhrDbl)
 
     teardown: ->
       ajax.poll = @ajaxPoll
+      ajax.create = @ajaxCreate
 
   test "it should start polling", ->
     @observable.url = "/my/url"
@@ -122,3 +126,16 @@ do ->
     raises =>
       @observable.connect()
     , TypeError
+
+  test "it will dispatch data from request", ->
+    data =
+      topic: [id: 1234]
+      otherTopic: [name: "Me"]
+    @observable.url = "/my/url"
+    @observable.dispatch = stubFn()
+
+    @observable.connect()
+    @xhrDbl.complete(200, JSON.stringify(data))
+
+    ok @observable.dispatch.called
+    deepEqual @observable.dispatch.args[0], data
