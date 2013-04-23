@@ -37,9 +37,7 @@ do ->
   # dependency injection, pg 298,299(326 in preview)
   test "#start opens an XHR request to a URL", ->
     @poller.start()
-
     ok @xhrDbl.open.called
-    deepEqual(@xhrDbl.open.args, ["GET", @poller.url, true])
 
   # knowing that the open method was called on transport doesn't necessarily
   # mean that the request was sent. Let's check that send was called as well
@@ -128,6 +126,16 @@ do ->
     @clock.tick(0) # touch the clock to fire queded timers
 
     ok ajax.request.called
+
+  test "add cache buster to URL", ->
+    date = new Date()
+    timeStamp = date.getTime()
+    stubDateConstructor(date)
+    @poller.url = "/url"
+
+    @poller.start()
+
+    strictEqual @xhrDbl.open.args[1], "/url?#{timeStamp}"
 
 do ->
   ajax = tddjs.ajax

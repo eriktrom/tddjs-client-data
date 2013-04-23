@@ -27,9 +27,11 @@ do ->
       interval = @interval
 
     requestStart = new Date().getTime()
-
+    urlWithCacheBust = "#{@url}?#{requestStart}"
+    # TODO: url will break if it already includes query parameters before we
+    # add ours - pg 320 & chpt 12, twice left as exercise to the reader
     self = @
-    ajax.request @url,
+    ajax.request urlWithCacheBust,
       complete: ->
         elapsed = new Date().getTime() - requestStart
         remaining = interval - elapsed
