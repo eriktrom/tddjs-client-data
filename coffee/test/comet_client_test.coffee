@@ -86,3 +86,39 @@ do ->
 
     ok observer2.called
     strictEqual observer2.args[0], data.myEvent[0]
+
+do ->
+  ajax = tddjs.ajax
+  module "cometClient#connect",
+    setup: ->
+      @client = @observable = Object.create(ajax.cometClient)
+      @ajaxPoll = ajax.poll
+
+    teardown: ->
+      ajax.poll = @ajaxPoll
+
+  test "it should start polling", ->
+    @observable.url = "/my/url"
+    ajax.poll = stubFn()
+
+    @observable.connect()
+
+    ok ajax.poll.called
+    strictEqual ajax.poll.args[0], "/my/url"
+
+  test "it will only allow one polling connection at a time", ->
+    @observable.url = "/my/url"
+    ajax.poll1 = stubFn()
+    @observable.connect()
+    ajax.poll2 = stubFn()
+
+    @observable.connect()
+
+    ok not ajax.poll2.called
+
+  test "it will throw an error is no url exists", ->
+    ajax.poll = stubFn()
+
+    raises =>
+      @observable.connect()
+    , TypeError

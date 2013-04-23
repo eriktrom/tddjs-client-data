@@ -18,7 +18,14 @@ do ->
 
     @observers.observe(topic, observer)
 
+  connect = ->
+    unless @url then throw new TypeError("cometClient url is null")
+    unless @poller # prevent more than one polling
+      @poller = ajax.poll(@url)
+
+
   ajax.cometClient = {
     dispatch
     observe
+    connect
   }
