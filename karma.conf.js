@@ -27,10 +27,9 @@ files = [
   // 'vendor/sinon-1.6.0.js',
   // 'vendor/jasmine-sinon.js',
 
-
+  'public/vendor/sinon-timers-1.6.0.js',
+  'public/vendor/sinon-timers-ie-1.6.0.js',
   'public/lib/tdd.js',
-  'public/lib/sinon-timers-1.6.0.js',
-  'public/lib/sinon-timers-ie-1.6.0.js',
   'public/lib/*.js',
   'public/src/*.js',
   'public/test/test_helpers.js',
