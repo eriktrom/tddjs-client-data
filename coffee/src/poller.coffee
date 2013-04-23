@@ -17,7 +17,9 @@
 # while the clock passed time)
 
 do ->
+  return if typeof tddjs is "undefined"
   ajax = tddjs.namespace("ajax")
+  return if !ajax.create || !Object.create
 
   start = ->
     unless @url then throw new TypeError("Must specify URL to poll")
