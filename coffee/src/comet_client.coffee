@@ -21,6 +21,9 @@ do ->
     @poller ||= ajax.poll @url,
       success: (xhr) =>
         @dispatch(JSON.parse(xhr.responseText))
+      headers:
+        "Content-Type": "application/json"
+        "X-Access-Token": ""
 
   ajax.cometClient = {
     dispatch

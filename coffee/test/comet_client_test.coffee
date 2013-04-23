@@ -139,3 +139,8 @@ do ->
 
     ok @client.dispatch.called
     deepEqual @client.dispatch.args[0], data
+
+  test "it should provide a custom header", ->
+    @client.url = "/my/url"
+    @client.connect()
+    ok @xhrDbl.headers["X-Access-Token"] isnt "undefined"
