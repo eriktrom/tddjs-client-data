@@ -96,13 +96,15 @@ do ->
       @client = Object.create(ajax.cometClient)
       @xhrDbl = Object.create(XMLHttpRequestDbl)
       ajax.create = stubFn(@xhrDbl)
+      @client.url = "/my/url"
+      @clock = sinon.useFakeTimers()
 
     teardown: ->
       ajax.poll = @ajaxPoll
       ajax.create = @ajaxCreate
+      @clock.restore()
 
   test "it should start polling", ->
-    @client.url = "/my/url"
     ajax.poll = stubFn()
 
     @client.connect()
@@ -111,7 +113,6 @@ do ->
     strictEqual ajax.poll.args[0], "/my/url"
 
   test "it will only allow one polling connection at a time", ->
-    @client.url = "/my/url"
     ajax.poll1 = stubFn()
     @client.connect()
     ajax.poll2 = stubFn()
@@ -121,6 +122,7 @@ do ->
     ok not ajax.poll2.called
 
   test "it will throw an error is no url exists", ->
+    @client.url = null
     ajax.poll = stubFn()
 
     raises =>
@@ -131,7 +133,6 @@ do ->
     data =
       topic: [id: 1234]
       otherTopic: [name: "Me"]
-    @client.url = "/my/url"
     @client.dispatch = stubFn()
 
     @client.connect()
@@ -141,6 +142,26 @@ do ->
     deepEqual @client.dispatch.args[0], data
 
   test "it should provide a custom header", ->
-    @client.url = "/my/url"
     @client.connect()
     ok @xhrDbl.headers["X-Access-Token"] isnt "undefined"
+
+  test "it should pass token on following request", ->
+    @client.connect()
+    data = {token: 397937423423}
+
+    @xhrDbl.complete(200, JSON.stringify(data))
+    @clock.tick(1000)
+
+    deepEqual @xhrDbl.headers["X-Access-Token"], data.token
+
+  module "cometClient#notify",
+    setup: ->
+      @client = Object.create(ajax.cometClient)
+
+  test "it should be a function", ->
+    ok typeof @client.notify is "function"
+
+  # test "it should POST to client.url", ->
+  # test "it should POST data as an object with properties topic & data", ->
+  # test "its Content-Type should be considered", ->
+

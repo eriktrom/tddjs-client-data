@@ -1,6 +1,8 @@
 do ->
+  return if typeof tddjs is "undefined"
   ajax = tddjs.namespace("ajax")
   util = tddjs.namespace("util")
+  # return if !ajax.poll || !util.observable # <-- fuck me
 
   dispatch = (data) ->
     observers = @observers
@@ -18,15 +20,27 @@ do ->
 
   connect = ->
     unless @url then throw new TypeError("cometClient url is null")
+    headers =
+      "Content-Type": "application/json"
+      "X-Access-Token": ""
     @poller ||= ajax.poll @url,
       success: (xhr) =>
-        @dispatch(JSON.parse(xhr.responseText))
-      headers:
-        "Content-Type": "application/json"
-        "X-Access-Token": ""
+        try
+          data = JSON.parse(xhr.responseText)
+          headers["X-Access-Token"] = data.token
+          @dispatch(data)
+        catch e
+      headers: headers
+
+  notify = ->
+
+
+
+
 
   ajax.cometClient = {
     dispatch
     observe
     connect
+    notify
   }
