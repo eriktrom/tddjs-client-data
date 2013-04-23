@@ -8,21 +8,21 @@ do ->
 
   module "cometClient#dispatch",
     setup: ->
-      @client = @observable = Object.create(ajax.cometClient)
-      @observable.observers = {notify: stubFn()}
+      @client = Object.create(ajax.cometClient)
+      @client.observers = {notify: stubFn()}
 
   # it plays the role of an observable
 
   test "it is a function", ->
-    ok typeof @observable.dispatch is "function"
+    ok typeof @client.dispatch is "function"
 
   test "it should notify observers", ->
     # expect dispatch to call notify on the observable observers object,
-    @observable.dispatch {someEvent: [{id: 1234}]}
+    @client.dispatch {someEvent: [{id: 1234}]}
 
-    args = @observable.observers.notify.args
+    args = @client.observers.notify.args
 
-    ok @observable.observers.notify.called
+    ok @client.observers.notify.called
     strictEqual args[0], "someEvent"
     deepEqual args[1], {id: 1234}
 
@@ -42,27 +42,27 @@ do ->
   #   deepEqual @client.observers.notify.args, []
 
   test "should not throw if no observers", ->
-    @observable.observers = null
+    @client.observers = null
 
-    do (-> @observable.dispatch(someEvent: [{}])).bind(@)
+    do (-> @client.dispatch(someEvent: [{}])).bind(@)
 
     ok true
     expect 1
 
   test "should not throw if notify is undefined", ->
-    @observable.observers = {}
+    @client.observers = {}
 
-    do (-> @observable.dispatch(someEvent: [{}])).bind(@)
+    do (-> @client.dispatch(someEvent: [{}])).bind(@)
     ok true
     expect 1
 
   test "should not throw if data is not provided", ->
-    do (-> @observable.dispatch()).bind(@)
+    do (-> @client.dispatch()).bind(@)
     ok true
     expect 1
 
   test "should not throw if event is null", ->
-    do (-> @observable.dispatch(myEvent: null)).bind(@)
+    do (-> @client.dispatch(myEvent: null)).bind(@)
     ok true
     expect 1
 
@@ -70,16 +70,16 @@ do ->
   ajax = tddjs.ajax
   module "cometClient#observe",
     setup: ->
-      @observable = Object.create(ajax.cometClient)
+      @client = Object.create(ajax.cometClient)
 
   test "should remember observers", ->
     observer1 = stubFn()
     observer2 = stubFn()
-    @observable.observe("myEvent", observer1)
-    @observable.observe("myEvent", observer2)
+    @client.observe("myEvent", observer1)
+    @client.observe("myEvent", observer2)
     data = { myEvent: [{}]}
 
-    @observable.dispatch(data)
+    @client.dispatch(data)
 
     ok observer1.called
     strictEqual observer1.args[0], data.myEvent[0]
@@ -93,7 +93,7 @@ do ->
     setup: ->
       @ajaxPoll = ajax.poll
       @ajaxCreate = ajax.create
-      @client = @observable = Object.create(ajax.cometClient)
+      @client = Object.create(ajax.cometClient)
       @xhrDbl = Object.create(XMLHttpRequestDbl)
       ajax.create = stubFn(@xhrDbl)
 
@@ -102,21 +102,21 @@ do ->
       ajax.create = @ajaxCreate
 
   test "it should start polling", ->
-    @observable.url = "/my/url"
+    @client.url = "/my/url"
     ajax.poll = stubFn()
 
-    @observable.connect()
+    @client.connect()
 
     ok ajax.poll.called
     strictEqual ajax.poll.args[0], "/my/url"
 
   test "it will only allow one polling connection at a time", ->
-    @observable.url = "/my/url"
+    @client.url = "/my/url"
     ajax.poll1 = stubFn()
-    @observable.connect()
+    @client.connect()
     ajax.poll2 = stubFn()
 
-    @observable.connect()
+    @client.connect()
 
     ok not ajax.poll2.called
 
@@ -124,18 +124,18 @@ do ->
     ajax.poll = stubFn()
 
     raises =>
-      @observable.connect()
+      @client.connect()
     , TypeError
 
   test "it will dispatch data from request", ->
     data =
       topic: [id: 1234]
       otherTopic: [name: "Me"]
-    @observable.url = "/my/url"
-    @observable.dispatch = stubFn()
+    @client.url = "/my/url"
+    @client.dispatch = stubFn()
 
-    @observable.connect()
+    @client.connect()
     @xhrDbl.complete(200, JSON.stringify(data))
 
-    ok @observable.dispatch.called
-    deepEqual @observable.dispatch.args[0], data
+    ok @client.dispatch.called
+    deepEqual @client.dispatch.args[0], data
