@@ -8,19 +8,21 @@ do ->
 
   module "cometClient#dispatch",
     setup: ->
-      @client = Object.create(ajax.cometClient)
-      @client.observers = {notify: stubFn()}
+      @client = @observable = Object.create(ajax.cometClient)
+      @observable.observers = {notify: stubFn()}
 
-  test "is a function", ->
-    ok typeof @client.dispatch is "function"
+  # it plays the role of an observable
 
-  test "should notify observers", ->
-    # expect dispatch to call notify on the observable observers object
-    @client.dispatch {someEvent: [{id: 1234}]}
+  test "it is a function", ->
+    ok typeof @observable.dispatch is "function"
 
-    args = @client.observers.notify.args
+  test "it should notify observers", ->
+    # expect dispatch to call notify on the observable observers object,
+    @observable.dispatch {someEvent: [{id: 1234}]}
 
-    ok @client.observers.notify.called
+    args = @observable.observers.notify.args
+
+    ok @observable.observers.notify.called
     strictEqual args[0], "someEvent"
     deepEqual args[1], {id: 1234}
 
@@ -40,27 +42,27 @@ do ->
   #   deepEqual @client.observers.notify.args, []
 
   test "should not throw if no observers", ->
-    @client.observers = null
+    @observable.observers = null
 
-    do (-> @client.dispatch(someEvent: [{}])).bind(@)
+    do (-> @observable.dispatch(someEvent: [{}])).bind(@)
 
     ok true
     expect 1
 
   test "should not throw if notify is undefined", ->
-    @client.observers = {}
+    @observable.observers = {}
 
-    do (-> @client.dispatch(someEvent: [{}])).bind(@)
+    do (-> @observable.dispatch(someEvent: [{}])).bind(@)
     ok true
     expect 1
 
   test "should not throw if data is not provided", ->
-    do (-> @client.dispatch()).bind(@)
+    do (-> @observable.dispatch()).bind(@)
     ok true
     expect 1
 
   test "should not throw if event is null", ->
-    do (-> @client.dispatch(myEvent: null)).bind(@)
+    do (-> @observable.dispatch(myEvent: null)).bind(@)
     ok true
     expect 1
 
@@ -68,19 +70,19 @@ do ->
   ajax = tddjs.ajax
   module "cometClient#observe",
     setup: ->
-      @client = Object.create(ajax.cometClient)
+      @observable = Object.create(ajax.cometClient)
 
-  # test "should remember observers", ->
-  #   observer1 = stubFn()
-  #   observer2 = stubFn()
-  #   @client.observe("myEvent", observer1)
-  #   @client.observe("myEvent", observer2)
-  #   data = { myEvent: [{}]}
+  test "should remember observers", ->
+    observer1 = stubFn()
+    observer2 = stubFn()
+    @observable.observe("myEvent", observer1)
+    @observable.observe("myEvent", observer2)
+    data = { myEvent: [{}]}
 
-  #   @client.dispatch(data)
+    @observable.dispatch(data)
 
-  #   ok observer1.called
-  #   strictEqual observer1.args[0], data.myEvent[0]
+    ok observer1.called
+    strictEqual observer1.args[0], data.myEvent[0]
 
-  #   ok observer2.called
-  #   strictEqual observer.args[0], data.myEvent[0]
+    ok observer2.called
+    strictEqual observer2.args[0], data.myEvent[0]

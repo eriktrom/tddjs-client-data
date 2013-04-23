@@ -1,5 +1,4 @@
 do ->
-
   _observers = (observable, event) ->
     observable.observers = {} unless observable.observers
     observable.observers[event] = [] unless observable.observers[event]
@@ -31,23 +30,3 @@ do ->
     hasObserver
     notify
   }
-
-  return
-
-
-
-
-
-
-
-
-
-
-# class Observable
-#   constructor: ->
-#     @observers = []
-
-#   observe: (observer) ->
-#     @observers.push(observer)
-
-#   tddjs.util.Observable = Observable

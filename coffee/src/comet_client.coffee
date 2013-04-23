@@ -1,5 +1,6 @@
 do ->
   ajax = tddjs.namespace("ajax")
+  util = tddjs.namespace("util")
 
   dispatch = (data) ->
     observers = @observers
@@ -11,9 +12,13 @@ do ->
         observers.notify(topic, event)
       return
 
-  # observe = ->
+  observe = (topic, observer) ->
+    if !@observers
+      @observers = Object.create(util.observable)
+
+    @observers.observe(topic, observer)
 
   ajax.cometClient = {
     dispatch
-    # observe
+    observe
   }
