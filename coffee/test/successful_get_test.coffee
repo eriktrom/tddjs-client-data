@@ -4,7 +4,7 @@ startSuccessfulGetTest = ->
   log = (text) ->
     if output?.innerHTML? then output.innerHTML += text
     # if output && typeof output.innerHTML isnt "undefined"
-      output.innerHTML += text
+      # output.innerHTML += text
     else document.write(text)
 
   try
